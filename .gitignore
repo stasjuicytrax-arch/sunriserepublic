@@ -1,0 +1,10 @@
+# Local review renders may contain internal architectural plans.
+/tmp/
+/private/
+/internal/
+
+# Original brand/architecture presentations are not website assets.
+*.pdf
+/node_modules/
+/dist/
+/.vite/

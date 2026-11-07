@@ -1,0 +1,339 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Шрифты: self-host woff2, только latin + cyrillic (DESIGN.md §2.1) */
+@import "@fontsource/inter-tight/latin-500.css";
+@import "@fontsource/inter-tight/cyrillic-500.css";
+@import "@fontsource/inter-tight/latin-600.css";
+@import "@fontsource/inter-tight/cyrillic-600.css";
+@import "@fontsource/onest/latin-400.css";
+@import "@fontsource/onest/cyrillic-400.css";
+@import "@fontsource/onest/latin-500.css";
+@import "@fontsource/onest/cyrillic-500.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/cyrillic-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+@import "@fontsource/jetbrains-mono/cyrillic-500.css";
+
+/* Tailwind видит только токены DESIGN.md §13: дефолтная палитра отключена */
+@theme inline {
+  --color-*: initial;
+  --color-graphite: var(--de-graphite);
+  --color-lime: var(--de-lime);
+  --color-lime-hot: var(--de-lime-hot);
+  --color-volt: var(--de-volt);
+  --color-cream: var(--de-cream);
+  --color-paper: var(--de-paper);
+  --color-void: var(--de-void);
+  --color-ink: var(--de-ink);
+  --color-ink-2: var(--de-ink-2);
+  --color-white: var(--de-white);
+  --color-mute: var(--de-mute);
+  --color-mute-2: var(--de-mute-2);
+  --color-line: var(--de-line);
+  --color-line-strong: var(--de-line-strong);
+  --color-error: var(--de-error);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-heading: var(--font-display);
+  --font-sans: var(--font-body);
+
+  --radius-xs: var(--r-xs);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-pill: var(--r-pill);
+
+  --ease-out-expo: var(--ease-out-expo);
+  --ease-in-out: var(--ease-in-out);
+  --ease-soft: var(--ease-soft);
+}
+
+@layer base {
+  html {
+    background: var(--de-void);
+    color: var(--de-white);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    min-height: 100dvh;
+    background: var(--de-void);
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--de-lime);
+    color: var(--de-ink);
+  }
+  :focus-visible {
+    outline: 1px solid var(--de-lime);
+    outline-offset: 3px;
+  }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+}
+
+/* Типографическая шкала DESIGN.md §2.2 */
+@utility text-display-xxl {
+  font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+  font-size: clamp(64px, 13vw, 232px); line-height: .84; letter-spacing: -.055em;
+  /* на 375px 64px не вмещают «ТЕХНОЛОГИИ»: ниже 640px шрифт тянется от ширины (предложено к правке DESIGN §2.2) */
+  @media (width < 640px) { font-size: 12.4vw; }
+}
+@utility text-display-xl {
+  font-family: var(--font-display); font-weight: 500; text-transform: uppercase;
+  font-size: clamp(48px, 8.4vw, 148px); line-height: .88; letter-spacing: -.05em;
+  /* «РАЗВЛЕЧЕНИЙ» не помещается в 48px на 375px (предложено к правке DESIGN §2.2) */
+  @media (width < 640px) { font-size: 11.6vw; }
+}
+@utility text-h1 {
+  font-family: var(--font-display); font-weight: 500; text-transform: uppercase;
+  font-size: clamp(40px, 5.6vw, 96px); line-height: .92; letter-spacing: -.045em;
+  /* длинные русские слова («ПРОГРАММИРОВАНИЕ,») не помещаются в 40px на 375px (предложено к правке DESIGN §2.2) */
+  @media (width < 640px) { font-size: 8.4vw; }
+}
+@utility text-h2 {
+  font-family: var(--font-display); font-weight: 500; text-transform: uppercase;
+  font-size: clamp(32px, 4vw, 64px); line-height: .95; letter-spacing: -.04em;
+}
+@utility text-h3 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(22px, 2.2vw, 36px); line-height: 1.05; letter-spacing: -.02em;
+}
+@utility text-body-l {
+  font-family: var(--font-body); font-weight: 400;
+  font-size: clamp(18px, 1.35vw, 22px); line-height: 1.45; letter-spacing: -.005em;
+}
+@utility text-body { font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+@utility text-small { font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+@utility text-label {
+  font-family: var(--font-mono); font-weight: 500; text-transform: uppercase;
+  font-size: 12px; line-height: 1.2; letter-spacing: .08em;
+}
+@utility text-micro {
+  font-family: var(--font-mono); font-weight: 400; text-transform: uppercase;
+  font-size: 11px; line-height: 1.2; letter-spacing: .1em;
+}
+
+/* Сетка DESIGN.md §3: поля и гаттер из токенов */
+@utility px-margin { padding-inline: var(--margin); }
+@utility gap-gutter { gap: var(--gutter); }
+@utility py-section { padding-block: var(--section-y); }
+@utility pt-section { padding-top: var(--section-y); }
+@utility mt-section { margin-top: var(--section-y); }
+@utility pb-section { padding-bottom: var(--section-y); }
+
+/* Liquid Glass DESIGN.md §7.1 (фильтр — src/components/ui/liquid-glass.tsx).
+   Фолбэк: blur(10px) + полупрозрачная белая заливка; в Chromium — SVG-преломление. */
+.glass {
+  isolation: isolate;
+  background: color-mix(in srgb, var(--de-white) 6%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4) brightness(1.05);
+  backdrop-filter: blur(10px) saturate(1.4) brightness(1.05);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--de-white) 22%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--de-white) 6%, transparent),
+    inset 0 0 0 1px var(--de-line),
+    inset 0 0 24px color-mix(in srgb, var(--de-white) 4%, transparent),
+    0 12px 32px -12px color-mix(in srgb, var(--de-void) 70%, transparent);
+}
+.glass-svg .glass {
+  background: color-mix(in srgb, var(--de-white) 3%, transparent);
+  backdrop-filter: url(#de-liquid) blur(2px) saturate(1.4) brightness(1.05);
+}
+/* Навбар: чуть темнее, чтобы лого читалось над светлыми фото */
+.glass.glass-nav, .glass-svg .glass.glass-nav { background: color-mix(in srgb, var(--de-void) 40%, transparent); }
+
+/* Сжатие навбара (desktop): одна анимация 450ms — transform пилюли, ширина абсолютной подложки
+   (без влияния на раскладку), opacity + сдвиг пунктов со stagger 30ms. backdrop-filter не меняется */
+@media (width >= 1024px) {
+  .nav-pill { transition: transform 450ms var(--ease-out-expo); }
+  .nav-glass { right: 0; transition: right 450ms var(--ease-out-expo); }
+  .nav-item {
+    transition: color var(--t-fast) var(--ease-soft), opacity 300ms var(--ease-out-expo), translate 450ms var(--ease-out-expo);
+    transition-delay: 0s, calc(var(--i, 0) * 30ms + 120ms), calc(var(--i, 0) * 30ms + 60ms);
+  }
+  .nav-burger { opacity: 0; pointer-events: none; transition: opacity 250ms var(--ease-out-expo), transform 450ms var(--ease-out-expo); }
+
+  .nav-pill[data-compact] { transform: translateX(calc(var(--cut) / 2)); }
+  .nav-pill[data-compact] .nav-glass { right: var(--cut); }
+  .nav-pill[data-compact] .nav-item { opacity: 0; translate: 0 -6px; pointer-events: none; transition-delay: 0s, calc(var(--i, 0) * 30ms), calc(var(--i, 0) * 30ms); }
+  .nav-pill[data-compact] .nav-burger { opacity: 1; pointer-events: auto; transform: translateX(calc(-1 * var(--dx))); transition-delay: 120ms, 0s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-pill, .nav-glass, .nav-item, .nav-burger { transition-duration: 1ms !important; transition-delay: 0s !important; }
+}
+
+/* Ghost: заливка white «вытекает» из точки входа курсора */
+.btn-ghost {
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--de-line-strong);
+}
+.btn-ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--de-white);
+  clip-path: circle(0 at var(--fx, 50%) var(--fy, 50%));
+  transition: clip-path var(--t-base) var(--ease-out-expo);
+}
+.btn-ghost:hover { color: var(--de-ink); }
+.btn-ghost:hover::before { clip-path: circle(150% at var(--fx, 50%) var(--fy, 50%)); }
+
+/* Text link: линия уезжает вправо и возвращается слева */
+.link-underline {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1px;
+  padding-bottom: 4px;
+}
+.link-underline:hover { animation: underline-run var(--t-slow) var(--ease-in-out); }
+@keyframes underline-run {
+  0% { background-position: 100% 100%; background-size: 100% 1px; }
+  45% { background-position: 100% 100%; background-size: 0 1px; }
+  55% { background-position: 0 100%; background-size: 0 1px; }
+  100% { background-position: 0 100%; background-size: 100% 1px; }
+}
+
+/* Линейка над панелью DESIGN.md §3: деления 8px, длинные 64px, бегунок прогресса */
+.ruler { container-type: inline-size; }
+.ruler-ticks {
+  background:
+    repeating-linear-gradient(to right, var(--de-line-strong) 0 1px, transparent 1px 64px) left bottom / 100% 100% no-repeat,
+    repeating-linear-gradient(to right, var(--de-line-strong) 0 1px, transparent 1px 8px) left bottom / 100% 6px no-repeat;
+}
+.ruler-runner {
+  transform: translateX(calc(var(--progress, 0) * (100cqw - 1px)));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--de-lime) 60%, transparent);
+}
+
+/* Hero: line reveal заголовка и появление элементов (DESIGN.md §8.2), reduced-motion — fade 200ms */
+.reveal-line { display: block; overflow: hidden; padding-bottom: .04em; margin-bottom: -.04em; }
+.reveal-line > span { display: block; animation: line-up var(--t-slow) var(--ease-out-expo) both; animation-delay: calc(var(--d, 0) * 60ms + 200ms); }
+.fade-up { animation: fade-up var(--t-slow) var(--ease-out-expo) both; animation-delay: calc(var(--d, 0) * 80ms + 500ms); }
+@keyframes line-up { from { transform: translateY(105%); } to { transform: translateY(0); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* Капсула с фото в строке заголовка: Ken Burns, пока нет видео (TZ §10.4) */
+.capsule { display: inline-block; height: .72em; width: 1.9em; border-radius: var(--r-pill); overflow: hidden; vertical-align: .06em; transition: width var(--t-base) var(--ease-out-expo); }
+.capsule:hover { width: 2.4em; }
+.capsule img { animation: ken-burns 14s var(--ease-in-out) infinite alternate; }
+@keyframes ken-burns { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.18) translate(-3%, 2%); } }
+
+/* Блок 2: контурная строка приветствия (stroke 1px) */
+/* бегущая строка вдвое мельче display-xl (правки заказчика): desktop clamp(48–96px), mobile clamp(28–40px) */
+.greeting-text { font-size: clamp(48px, 5.5vw, 96px); }
+@media (width < 640px) { .greeting-text { font-size: clamp(28px, 9vw, 40px); } }
+.greeting-outline { color: transparent; -webkit-text-stroke: 1px var(--de-white); }
+.greeting-outline-mute { color: transparent; -webkit-text-stroke: 1px var(--de-mute); }
+
+/* Блок 8: логотипы клиентов — монохром --de-ink 60%, на hover полный цвет и лёгкое увеличение */
+.client-logo { filter: brightness(0); opacity: .6; transition: filter var(--t-base) var(--ease-soft), opacity var(--t-base) var(--ease-soft), transform var(--t-base) var(--ease-out-expo); }
+.client-logo:hover { filter: none; opacity: 1; transform: scale(1.06); }
+
+/* Бегущие чипы направлений в нижней полосе hero */
+.chips-track { animation: chips-run 40s linear infinite; }
+@keyframes chips-run { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-line > span, .fade-up { animation: fade-in 200ms ease-out both; }
+  .capsule img, .chips-track { animation: none; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+}
+
+/* Кастомный курсор: нативный прячем только когда наш активен (desktop, pointer: fine) */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-ghost::before { transition: none; }
+  .link-underline:hover { animation: none; }
+}
+
+/* Зерно DESIGN.md §7.4: SVG-noise поверх сайта, сдвиг 8 кадров/с */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 1s steps(8) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  12.5% { transform: translate(-3%, 2%); }
+  25% { transform: translate(2%, -4%); }
+  37.5% { transform: translate(-4%, -1%); }
+  50% { transform: translate(3%, 3%); }
+  62.5% { transform: translate(-1%, 4%); }
+  75% { transform: translate(4%, -2%); }
+  87.5% { transform: translate(-2%, -3%); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain { animation: none; }
+}
+
+/* HUD-уголки: лаймовые скобки по углам карточки, проявляются на hover/фокусе (контакты, карточки услуг) */
+.hud-corner {
+  position: absolute; width: 14px; height: 14px; pointer-events: none;
+  border-color: var(--de-lime); border-style: solid; border-width: 0;
+  opacity: 0; transition: opacity var(--t-fast) var(--ease-soft), translate var(--t-base) var(--ease-out-expo);
+}
+.hud-corner--tl { top: 8px; left: 8px; border-top-width: 1.5px; border-left-width: 1.5px; translate: 4px 4px; }
+.hud-corner--tr { top: 8px; right: 8px; border-top-width: 1.5px; border-right-width: 1.5px; translate: -4px 4px; }
+.hud-corner--bl { bottom: 8px; left: 8px; border-bottom-width: 1.5px; border-left-width: 1.5px; translate: 4px -4px; }
+.hud-corner--br { bottom: 8px; right: 8px; border-bottom-width: 1.5px; border-right-width: 1.5px; translate: -4px -4px; }
+.hud-card:hover .hud-corner, .hud-card:focus-within .hud-corner { opacity: 1; translate: 0 0; }
+
+/* Метка на карте: лаймовое кольцо расходится от ✱ */
+.map-pin::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: 0 0 0 1px var(--de-lime); animation: map-pulse 2.2s var(--ease-out-expo) infinite;
+}
+@keyframes map-pulse { from { transform: scale(1); opacity: .8; } to { transform: scale(2.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .map-pin::after { animation: none; opacity: 0; } }
+
+/* ── Страницы услуг ─────────────────────────────────────────────── */
+/* Название по буквам: каждая въезжает снизу, шаг 30ms */
+.letter-reveal { display: inline-block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; vertical-align: bottom; }
+.letter-reveal > span { display: inline-block; animation: line-up var(--t-slow) var(--ease-out-expo) both; animation-delay: calc(var(--d, 0) * 30ms + 150ms); }
+/* Слайдшоу hero: медленный Ken Burns на активном кадре, прогресс кадра 6 с */
+.hero-kenburns { animation: hero-kb 7s var(--ease-in-out) both; }
+@keyframes hero-kb { from { transform: scale(1); } to { transform: scale(1.05); } } /* мягкий зум: сильное увеличение мылит кадр */
+.hero-progress { width: 100%; transform-origin: left; animation: hero-progress 6s linear both; }
+@keyframes hero-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Bento-карточка: стеклянная панель техтребований выезжает снизу */
+@media (hover: hover) and (pointer: fine) {
+  .bento-card .bento-tech { opacity: 0; translate: 0 16px; transition: opacity var(--t-fast) var(--ease-soft), translate var(--t-base) var(--ease-out-expo); }
+  .bento-card:hover .bento-tech, .bento-card:focus-visible .bento-tech { opacity: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter-reveal > span { animation: fade-in 200ms ease-out both; }
+  .hero-kenburns { animation: none; }
+}
+
+
+/* CTA-баннер: точечная сетка, вокруг курсора подсвечивается лаймом (spotlight ~300px) */
+.cta-dots { background-image: radial-gradient(circle at center, var(--de-line-strong) 1px, transparent 1.6px); background-size: 16px 16px; }
+.cta-dots--lit {
+  background-image: radial-gradient(circle at center, var(--de-lime) 1.2px, transparent 1.8px);
+  mask-image: radial-gradient(300px circle at var(--sx, -999px) var(--sy, -999px), #000, transparent 70%);
+}
+/* line-reveal заголовка запускается, когда баннер доехал до экрана */
+.cta-title:not([data-in]) .reveal-line > span { animation: none; transform: translateY(105%); }
+@media (prefers-reduced-motion: reduce) { .cta-title:not([data-in]) .reveal-line > span { transform: none; } }
+
+/* Карточка позиции: размытая увеличенная копия текущего кадра за стеклянной панелью */
+.item-backdrop img { filter: blur(80px) saturate(1.2); transform: scale(1.3); opacity: .35; }
+
+/* Логотипы клиентов на тёмных стеклянных ячейках (/about): моно белые, на hover — цвет */
+.client-logo-dark { filter: brightness(0) invert(1); opacity: .55; transition: filter var(--t-base) var(--ease-soft), opacity var(--t-base) var(--ease-soft), scale var(--t-base) var(--ease-out-expo); }
+.hud-card:hover .client-logo-dark { filter: none; opacity: 1; scale: 1.06; }
