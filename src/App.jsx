@@ -37,7 +37,7 @@ function GlassFilter() {
   return <svg className="filter-defs" aria-hidden="true"><defs><filter id="sr-liquid" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB"><feImage href={`data:image/svg+xml,${encodeURIComponent(map)}`} width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="22" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>;
 }
 
-function Navigation() {
+function Navigation({ paused, reduced, onToggleMotion }) {
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const dialog = useRef(null);
@@ -63,12 +63,15 @@ function Navigation() {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
   const close = () => { setOpen(false); trigger.current?.focus(); };
+  const motionLabel = paused ? 'Resume background motion' : 'Pause background motion';
+  const motionIcon = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paused ? 'M9 5l11 7-11 7V5Z' : 'M9 6v12m6-12v12'}/></svg>;
   return <>
     <header className={`site-header ${compact ? 'is-compact' : ''}`}>
       <div className="nav-shell glass">
         <a className="brand" href="#home" aria-label="SUNRISE REPUBLIC — home" translate="no"><BrandMark/><span>SUNRISE<br/>REPUBLIC</span></a>
         <nav className="nav-links" aria-label="Main navigation" inert={compact || undefined}>
           {links.map(([text, href]) => <a key={href} href={href}>{text}</a>)}
+          {!reduced && <button className="nav-motion" aria-label={motionLabel} title={motionLabel} onClick={onToggleMotion}>{motionIcon}</button>}
           <a className="button button-red nav-cta" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
         </nav>
         <button className="menu-trigger" ref={trigger} aria-label="Open menu" aria-expanded={open} aria-controls="main-menu" onClick={() => setOpen(true)}><span/><span/></button>
@@ -78,6 +81,7 @@ function Navigation() {
       <div className="menu-top"><span translate="no">SUNRISE REPUBLIC</span><button className="round-button" aria-label="Close menu" onClick={close}><CloseIcon/></button></div>
       <nav aria-label="Expanded navigation">{links.map(([text, href], i) => <a href={href} key={href} onClick={close} style={{ '--menu-order': i }}><span className="menu-number">0{i + 1}</span><span>{text}</span><Arrow/></a>)}</nav>
       <div className="menu-bottom"><p>Nha Trang, Vietnam<br/><span>Planned opening · 31 December</span></p><a href={mapUrl} className="button button-red" target="_blank" rel="noreferrer">Get directions <Arrow/></a></div>
+      {!reduced && <button className="menu-motion" onClick={onToggleMotion}>{motionIcon}{motionLabel}</button>}
     </dialog>
   </>;
 }
@@ -112,16 +116,29 @@ function Gallery({ index, setIndex, full, setFull }) {
 }
 
 function Location() {
+  const [interactive, setInteractive] = useState(false);
   return (
     <section className="location section-wrap" id="find-us" aria-labelledby="location-title">
-      <div className="location-copy section-reveal">
-        <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>05</span></p>
-        <h2 id="location-title">FIND US.</h2>
-        <address>11 Ngô Gia Tự<br/>Nha Trang, Khánh Hòa 650000<br/>Vietnam</address>
-        <a className="button button-red" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
-      </div>
-      <div className="location-map section-reveal">
-        <iframe title="Google Maps — 11 Ngô Gia Tự, Nha Trang" src={mapEmbed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+      <div className="location-stage">
+        <div className="location-copy section-reveal">
+          <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>05</span></p>
+          <h2 id="location-title">FIND US.</h2>
+          <address><strong>11 Ngô Gia Tự</strong><br/>Nha Trang, Khánh Hòa 650000<br/>Vietnam</address>
+          <a className="button button-red" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
+        </div>
+        <div className="location-map section-reveal" aria-label="Map of the club location" role="region">
+          <div className="location-map-view" id="club-map-view">
+            {interactive ? (
+              <iframe title="Google Maps — 11 Ngô Gia Tự, Nha Trang" src={mapEmbed} referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+            ) : (
+              <img src={media('nha-trang-map.svg')} alt="Street map showing the club at 11 Ngô Gia Tự." width="1400" height="900" loading="lazy" />
+            )}
+          </div>
+          <div className="location-map-bar">
+            <button className="button glass map-toggle" aria-expanded={interactive} aria-controls="club-map-view" onClick={() => setInteractive(value => !value)}>{interactive ? 'Show map preview' : 'Open interactive map'} <Arrow direction={interactive ? 'left' : 'up-right'}/></button>
+            {!interactive && <a className="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a>}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -153,8 +170,8 @@ export default function App() {
       clipPath: 'inset(0% 0% 0% 0%)', '--room-scale': 1, ease: 'none',
       scrollTrigger: { trigger: '.gallery-stage', start: 'top 98%', end: 'top 29%', scrub: .45 },
     });
-    gsap.fromTo('.atmosphere-photo img', { yPercent: -9, scale: 1.21 }, {
-      yPercent: 9, scale: 1.21, ease: 'none',
+    gsap.fromTo('.atmosphere-photo img', { yPercent: -3.5, scale: 1.085 }, {
+      yPercent: 3.5, scale: 1.085, ease: 'none',
       scrollTrigger: { trigger: '.atmosphere', start: 'top bottom', end: 'bottom top', scrub: .45 },
     });
     gsap.from('.atmosphere-heading .word', {
@@ -181,7 +198,7 @@ export default function App() {
   }, { scope: root, dependencies: [reduced], revertOnUpdate: true });
   return <div ref={root} className={paused || reduced ? 'motion-paused' : undefined}>
     <a href="#main" className="skip-link">Skip to content</a>
-    <GlassFilter/><Navigation/>
+    <GlassFilter/><Navigation paused={paused} reduced={reduced} onToggleMotion={() => setPaused(value => !value)}/>
     <main id="main">
       <section id="home" className="hero" aria-labelledby="hero-title">
         <SunriseScene paused={paused || reduced}/>
@@ -190,38 +207,41 @@ export default function App() {
           <p className="hero-location"><span className="location-dot"/> Nightclub · Nha Trang, Vietnam</p>
           <h1 id="hero-title"><span className="hero-line hero-line-intro"><span>STAY TILL</span></span><span className="hero-line hero-line-title"><span>SUNRISE.</span></span></h1>
         </div>
-        <div className="hero-bottom">
-          <button className="motion-control" onClick={() => setPaused(v => !v)} aria-label={paused || reduced ? 'Play ambient animation' : 'Pause ambient animation'} aria-pressed={paused || reduced} disabled={reduced}><span className={`motion-icon ${paused || reduced ? 'paused' : ''}`} aria-hidden="true"><i/><i/><i/><i/></span><span>{paused || reduced ? 'Motion paused' : 'Pause motion'}</span></button>
-          <a className="button glass hero-action" href="#club">Explore the club <Arrow direction="down"/></a>
-          <div className="opening-note"><span>Planned opening</span><p>31 December<svg className="opening-star" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" strokeWidth="1.5">{Array.from({ length: 8 }, (_, i) => <path key={i} d="M20 4v9" transform={`rotate(${i * 45} 20 20)`}/>)}<circle cx="20" cy="20" r="3"/></g></svg></p></div>
-        </div>
       </section>
       <section id="club" className="club section-wrap" aria-labelledby="club-title">
         <div className="club-heading"><p className="section-kicker">The space <span>01</span></p><h2 id="club-title">INSIDE THE<br/>REPUBLIC</h2><p className="section-intro">Red light. Reflective surfaces.<br/>A space built around music.</p></div>
         <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
       </section>
       <section id="atmosphere" className="atmosphere" aria-labelledby="atmosphere-title">
-        <div className="atmosphere-photo"><img src={media('atmosphere.webp')} alt="An editorial image of two friends dancing in warm red light." loading="lazy" width="1086" height="1448"/><span className="photo-note">A feeling, before the first night.</span></div>
+        <div className="atmosphere-photo">
+          <picture>
+            <source media="(max-width: 760px)" srcSet={media('atmosphere.webp')} width="1086" height="1448"/>
+            <img src={media('atmosphere-wide.webp')} alt="An editorial image of two friends dancing in warm red light." loading="lazy" decoding="async" width="1672" height="941"/>
+          </picture>
+          <span className="photo-note">A feeling, before the first night.</span>
+        </div>
         <div className="atmosphere-copy"><p className="atmosphere-kicker">The atmosphere <span>02</span></p><h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span><span className="word-mask"><span className="word">NIGHT.</span></span></h2><p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p></div>
         <div className="atmosphere-signature"><p>Stay till sunrise.</p><a href="#opening" className="button glass">The first night <Arrow direction="down"/></a></div>
       </section>
-      <section className="details section-wrap" aria-labelledby="details-title">
-        <div className="details-heading section-reveal">
-          <p className="section-kicker chapter-kicker">Light &amp; materials <span>03</span></p>
-          <h2 id="details-title">EVERY DETAIL<br/>MATTERS.</h2>
-        </div>
-        <div className="details-spread">
-          <figure className="detail-lounge section-reveal">
-            <img src={media('lounge.webp')} width="1116" height="1400" loading="lazy" alt="Red lounge seating under mirrored ceiling lights with the SR monogram on the wall." />
-            <figcaption><span>The lounge</span><span>01</span></figcaption>
-          </figure>
-          <figure className="detail-mirrors section-reveal">
-            <button onClick={() => { setGalleryIndex(2); setGalleryFull(true); }} aria-label="Enlarge Mirrors and details">
-              <img src={media('mirrors.webp')} width="1024" height="1280" loading="lazy" alt="Lit circular mirror and glass blocks above dark stone basins." />
-              <span className="detail-arrow glass"><Arrow/></span>
-            </button>
-            <figcaption><span>Mirrors &amp; details</span><span>02</span></figcaption>
-          </figure>
+      <section className="details section-wrap" id="details" aria-labelledby="details-title">
+        <div className="details-inner">
+          <div className="details-heading section-reveal">
+            <p className="section-kicker chapter-kicker">Light &amp; materials <span>03</span></p>
+            <h2 id="details-title">EVERY DETAIL MATTERS.</h2>
+          </div>
+          <div className="details-spread">
+            <figure className="detail-lounge section-reveal">
+              <div className="detail-media"><img src={media('lounge.webp')} width="1116" height="1400" loading="lazy" alt="Red lounge seating under mirrored ceiling lights with the SR monogram on the wall." /></div>
+              <figcaption><span>The lounge</span><span>01</span></figcaption>
+            </figure>
+            <figure className="detail-mirrors section-reveal">
+              <button className="detail-media" onClick={() => { setGalleryIndex(2); setGalleryFull(true); }} aria-label="Enlarge Mirrors and details">
+                <img src={media('mirrors.webp')} width="1024" height="1280" loading="lazy" alt="Lit circular mirror and glass blocks above dark stone basins." />
+                <span className="detail-arrow glass"><Arrow/></span>
+              </button>
+              <figcaption><span>Mirrors &amp; details</span><span>02</span></figcaption>
+            </figure>
+          </div>
         </div>
       </section>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">

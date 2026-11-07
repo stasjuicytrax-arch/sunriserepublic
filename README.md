@@ -24,7 +24,8 @@ Open http://127.0.0.1:5173/ on this computer. Production check: `npm run build`;
 
 - Main room, bar and lounge: extracted from the user's interior design PDF. Public crops show only the renderings. Interior design by NA Studio Saigon.
 - Mirrors: user-supplied restroom visualization.
-- Atmosphere: AI-generated editorial image of fictional adult guests; it is not a photograph of an event at this unopened club. Created with the built-in Imagegen tool on 2026-11-07.
+- Atmosphere: landscape and portrait images of fictional adult guests, generated with the built-in ImageGen tool on 2026-11-07. The landscape prompt called for two Vietnamese friends dancing in a crimson-lit club, framed from the torso up with sharp facial detail and dark negative space on the left for live typography.
+- Location preview: street and building geometry from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), ODbL. The interactive view and directions use Google Maps.
 - Raster logo: original supplied artwork. The interface displays the monogram from it.
 - Initial image concepts: `design/concepts/v1/`; superseded as the review format by the user's request to show actual working markup.
 
