@@ -33,6 +33,7 @@ Open http://127.0.0.1:5173/ on this computer. Production check: `npm run build`;
 - Production build succeeds.
 - Local server returns HTTP 200.
 - Source reviewed for navigation, dialogs, reduced motion and resource cleanup.
-- Rendered desktop/mobile, real browser glass compatibility and animation performance remain unverified: browser control returned “Local browser use is disabled in Work settings”.
+- The published site was checked in Chromium at 1440 px and 390 px. Checks covered the WebGL scene, pause, gallery navigation and enlargement, the mobile menu, and the embedded map.
+- Safari behavior, physical device performance and the exact entrance marker still need verification.
 
 Internal PDF files and temporary contact sheets are not public assets and must never be copied into public/ or deployed output.

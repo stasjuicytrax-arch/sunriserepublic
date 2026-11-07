@@ -353,7 +353,7 @@ Three.js отвечает за сцену; GSAP может координиро�
   --color-light-section-text: var(--sr-black);
   --nav-glass-fill: rgb(0 0 0 / 40%);
 
-  --font-brand: "Cinzel", Georgia, serif;
+  --font-brand: "Montserrat Variable", Arial, sans-serif;
   --font-display: "Montserrat", Arial, sans-serif;
   --font-body: "Montserrat", Arial, sans-serif;
 
