@@ -26,6 +26,7 @@ Open http://127.0.0.1:5173/ on this computer. Production check: `npm run build`;
 - Mirrors: user-supplied restroom visualization.
 - Atmosphere: landscape and portrait images of fictional adult guests, generated with the built-in ImageGen tool on 2026-11-07. The landscape prompt called for two Vietnamese friends dancing in a crimson-lit club, framed from the torso up with sharp facial detail and dark negative space on the left for live typography.
 - Location preview: street and building geometry from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), ODbL. The interactive view and directions use Google Maps.
+- Programme previews: Mix & Mangle, Rise & Shine and Tempo Rush use poster artwork cropped from page 33 of the supplied brand kit. These examples have no announced dates.
 - Raster logo: original supplied artwork. The interface displays the monogram from it.
 - Initial image concepts: `design/concepts/v1/`; superseded as the review format by the user's request to show actual working markup.
 

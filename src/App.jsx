@@ -11,11 +11,18 @@ const address = '11 Ngô Gia Tự, Nha Trang, Khánh Hòa 650000, Vietnam';
 const mapQuery = encodeURIComponent(address);
 const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`;
 const mapEmbed = `https://maps.google.com/maps?q=${mapQuery}&z=17&output=embed`;
-const links = [['The club', '#club'], ['Atmosphere', '#atmosphere'], ['Opening', '#opening'], ['Find us', '#find-us']];
+const links = [['The club', '#club'], ['Atmosphere', '#atmosphere'], ['Events', '#events'], ['Opening', '#opening'], ['Find us', '#find-us']];
 const images = [
-  { src: 'main-room.webp', title: 'The main room', alt: 'Interior visualization of the main room with angular ceiling lights, red walls and a central DJ booth.' },
-  { src: 'bar.webp', title: 'At the bar', alt: 'Interior visualization of the long illuminated bar and sculptural ceiling lights.' },
-  { src: 'mirrors.webp', title: 'Mirrors & details', alt: 'Restroom interior with an illuminated mirror, glass blocks and dark stone basins.' },
+  { src: 'main-room.webp', title: 'The main room', detail: 'The dance floor', width: 2000, height: 1246, alt: 'Interior visualization of the main room with angular ceiling lights, red walls and a central DJ booth.' },
+  { src: 'bar.webp', title: 'At the bar', detail: 'Sculpted light', width: 2000, height: 915, alt: 'Interior visualization of the long illuminated bar and sculptural ceiling lights.' },
+  { src: 'lounge.webp', title: 'The lounge', detail: 'A quieter corner', width: 1116, height: 1400, alt: 'Red lounge seating under mirrored ceiling lights with the SR monogram on the wall.' },
+  { src: 'mirrors.webp', title: 'Mirrors & details', detail: 'Glass and stone', width: 1024, height: 1280, alt: 'Restroom interior with an illuminated mirror, glass blocks and dark stone basins.' },
+];
+const mirrorsIndex = images.findIndex(image => image.src === 'mirrors.webp');
+const posters = [
+  { title: 'Mix & Mangle', src: 'poster-mix-and-mangle.webp', width: 616 },
+  { title: 'Rise & Shine', src: 'poster-rise-and-shine.webp', width: 607 },
+  { title: 'Tempo Rush', src: 'poster-tempo-rush.webp', width: 607 },
 ];
 
 function Arrow({ direction = 'up-right', ...props }) {
@@ -90,6 +97,7 @@ function Gallery({ index, setIndex, full, setFull }) {
   const dialog = useRef(null);
   const touch = useRef(0);
   const swiped = useRef(false);
+  const current = images[index];
   const change = (direction) => setIndex(i => (i + direction + images.length) % images.length);
   useEffect(() => {
     if (full) { dialog.current.showModal(); document.body.style.overflow = 'hidden'; }
@@ -98,21 +106,59 @@ function Gallery({ index, setIndex, full, setFull }) {
   }, [full]);
   const controls = <><button className="round-button glass" aria-label="Previous interior" onClick={() => change(-1)}><Arrow direction="left"/></button><button className="round-button glass" aria-label="Next interior" onClick={() => change(1)}><Arrow direction="right"/></button></>;
   return <>
-    <div className="gallery-stage" role="region" aria-label="Interior previews" aria-roledescription="carousel" onKeyDown={e => { if (e.key === 'ArrowRight') { e.preventDefault(); change(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); change(-1); } }} onTouchStart={e => { touch.current = e.changedTouches[0].clientX; swiped.current = false; }} onTouchEnd={e => { const d = touch.current - e.changedTouches[0].clientX; if (Math.abs(d) > 50) { swiped.current = true; change(d > 0 ? 1 : -1); } }}>
-      <button className="gallery-open" aria-label={`Enlarge ${images[index].title}`} onClick={() => { if (!swiped.current) setFull(true); swiped.current = false; }}>
-        {images.map((im, i) => <img key={im.src} src={media(im.src)} alt={im.alt} className={i === index ? 'is-active' : ''} aria-hidden={i !== index} loading="lazy" decoding="async" width="2000" height="1246" />)}
-        <span className="gallery-hint glass">Take a closer look <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
-        <span className="gallery-scene-label" aria-hidden="true" key={index}><span>0{index + 1} / 0{images.length}</span>{images[index].title}</span>
-      </button>
-      <div className="gallery-controls">{controls}</div>
+    <div className="gallery-reel" role="region" aria-label="Interior previews" aria-roledescription="carousel">
+      <div className="gallery-stage" onKeyDown={e => { if (e.key === 'ArrowRight') { e.preventDefault(); change(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); change(-1); } }} onTouchStart={e => { touch.current = e.changedTouches[0].clientX; swiped.current = false; }} onTouchEnd={e => { const d = touch.current - e.changedTouches[0].clientX; if (Math.abs(d) > 50) { swiped.current = true; change(d > 0 ? 1 : -1); } }}>
+        <button className="gallery-open" aria-label={`Enlarge ${current.title}`} onClick={() => { if (!swiped.current) setFull(true); swiped.current = false; }}>
+          <span className="gallery-camera">
+            {images.map((im, i) => <img key={im.src} src={media(im.src)} alt={im.alt} className={i === index ? 'is-active' : ''} aria-hidden={i !== index} loading="lazy" decoding="async" width={im.width} height={im.height}/>) }
+          </span>
+          <span className="gallery-exposure" aria-hidden="true"/>
+          <span className="gallery-hint glass">View full frame <Arrow/></span>
+          <span className="gallery-scene-label" aria-hidden="true" key={index}><span>0{index + 1} / 0{images.length}</span>{current.title}</span>
+        </button>
+        <div className="gallery-controls">{controls}</div>
+      </div>
+      <div className="gallery-index" aria-label="Choose an interior">
+        <p className="gallery-index-label">Inside the club <span aria-live="polite" className="gallery-live">{current.title}</span></p>
+        {images.map((im, i) => (
+          <button className="gallery-pick" key={im.src} aria-pressed={i === index} onClick={() => setIndex(i)}>
+            <img src={media(im.src)} alt="" loading="lazy" decoding="async" width={im.width} height={im.height}/>
+            <span><span className="gallery-pick-number">0{i + 1} · {im.detail}</span><strong>{im.title}</strong></span>
+          </button>
+        ))}
+      </div>
     </div>
-    <div className="gallery-caption"><span aria-live="polite">{images[index].title}</span><div className="gallery-pagination" aria-label="Choose an interior">{images.map((im, i) => <button key={im.src} aria-label={`Show ${im.title}`} aria-pressed={i === index} onClick={() => setIndex(i)}><span/></button>)}</div><span>Interior preview <span className="gallery-count">0{index + 1} / 0{images.length}</span></span></div>
     <dialog ref={dialog} className="lightbox" aria-label="Club interior gallery" onCancel={() => setFull(false)} onKeyDown={e => { if (e.key === 'ArrowRight') change(1); if (e.key === 'ArrowLeft') change(-1); }} onClick={e => { if (e.target === dialog.current) setFull(false); }}>
       <button className="round-button glass lightbox-close" aria-label="Close image" onClick={() => setFull(false)}><CloseIcon/></button>
-      {full && <img key={index} src={media(images[index].src)} alt={images[index].alt} width="2000" height="1246"/>}
-      <div className="lightbox-bottom"><p aria-live="polite">{images[index].title}</p><div className="gallery-controls">{controls}</div></div>
+      {full && <img key={index} src={media(current.src)} alt={current.alt} width={current.width} height={current.height}/>}
+      <div className="lightbox-bottom"><p aria-live="polite">{current.title}</p><div className="gallery-controls">{controls}</div></div>
     </dialog>
   </>;
+}
+
+function UpcomingEvents() {
+  return (
+    <section className="events section-wrap" id="events" aria-labelledby="events-title">
+      <div className="events-inner">
+        <div className="events-heading">
+          <p className="section-kicker chapter-kicker">Programme <span>04</span></p>
+          <h2 id="events-title"><span className="word-mask"><span className="chapter-word">UPCOMING EVENTS.</span></span></h2>
+          <p className="section-intro">A first look at the programme.<br/>Dates to be announced.</p>
+        </div>
+        <ul className="event-posters" tabIndex={0} aria-label="Programme previews">
+          {posters.map((poster, i) => (
+            <li className="event-poster" key={poster.src}>
+              <div className="event-poster-art">
+                <img src={media(poster.src)} alt="" width={poster.width} height="1077" loading="lazy" decoding="async"/>
+                <span className="poster-number" aria-hidden="true">0{i + 1}</span>
+              </div>
+              <div className="poster-caption"><h3>{poster.title}</h3><span>Preview</span></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
 }
 
 function Location() {
@@ -121,7 +167,7 @@ function Location() {
     <section className="location section-wrap" id="find-us" aria-labelledby="location-title">
       <div className="location-stage">
         <div className="location-copy section-reveal">
-          <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>05</span></p>
+          <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>06</span></p>
           <h2 id="location-title">FIND US.</h2>
           <address><strong>11 Ngô Gia Tự</strong><br/>Nha Trang, Khánh Hòa 650000<br/>Vietnam</address>
           <a className="button button-red" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
@@ -162,13 +208,19 @@ export default function App() {
       yPercent: -24, scale: .92, ease: 'none',
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 25%', scrub: .5 },
     });
-    gsap.from('.club-heading > *', {
-      y: 38, opacity: .35, stagger: .11, duration: .9, ease: 'power3.out',
-      scrollTrigger: { trigger: '.club-heading', start: 'top 87%', once: true },
+    for (const title of root.current.querySelectorAll('.chapter-title, #events-title')) {
+      gsap.from(title.querySelectorAll('.chapter-word'), {
+        yPercent: 108, rotate: 2.5, stagger: .15, duration: 1.15, ease: 'power4.out',
+        scrollTrigger: { trigger: title, start: 'top 90%', once: true },
+      });
+    }
+    gsap.fromTo('.gallery-camera', { scale: 1.03, yPercent: 1 }, {
+      scale: 1.21, yPercent: -4, ease: 'none',
+      scrollTrigger: { trigger: '.gallery-stage', start: 'top bottom', end: 'bottom 24%', scrub: .5 },
     });
-    gsap.fromTo('.gallery-stage', { clipPath: 'inset(10% 14% 10% 14%)', '--room-scale': 1.22 }, {
-      clipPath: 'inset(0% 0% 0% 0%)', '--room-scale': 1, ease: 'none',
-      scrollTrigger: { trigger: '.gallery-stage', start: 'top 98%', end: 'top 29%', scrub: .45 },
+    gsap.fromTo('.gallery-exposure', { xPercent: -110, opacity: .48 }, {
+      xPercent: 110, opacity: 0, ease: 'power2.out', duration: 1.5,
+      scrollTrigger: { trigger: '.gallery-stage', start: 'top 79%', once: true },
     });
     gsap.fromTo('.atmosphere-photo img', { yPercent: -3.5, scale: 1.085 }, {
       yPercent: 3.5, scale: 1.085, ease: 'none',
@@ -178,13 +230,13 @@ export default function App() {
       yPercent: 110, stagger: .16, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: '.atmosphere-heading', start: 'top 88%', once: true },
     });
-    gsap.from('.atmosphere-signature', {
-      x: 34, opacity: .3, duration: .9, ease: 'power3.out',
-      scrollTrigger: { trigger: '.atmosphere-signature', start: 'top 92%', once: true },
+    gsap.fromTo('.signature-orbit', { yPercent: 18, rotate: -12, scale: .84 }, {
+      yPercent: -13, rotate: 8, scale: 1.15, ease: 'none',
+      scrollTrigger: { trigger: '.atmosphere-signature', start: 'top bottom', end: 'bottom top', scrub: .6 },
     });
-    gsap.fromTo('.first-night-orbits', { scale: .7, rotate: -13 }, {
-      scale: 1.2, rotate: 12, ease: 'none',
-      scrollTrigger: { trigger: '.first-night', start: 'top bottom', end: 'bottom top', scrub: .5 },
+    gsap.from('.event-poster', {
+      y: 36, opacity: .35, duration: .95, stagger: .11, ease: 'power3.out',
+      scrollTrigger: { trigger: '.event-posters', start: 'top 86%', once: true },
     });
     for (const selector of ['.details', '.first-night', '.location']) {
       gsap.from(`${selector} .section-reveal`, {
@@ -209,8 +261,14 @@ export default function App() {
         </div>
       </section>
       <section id="club" className="club section-wrap" aria-labelledby="club-title">
-        <div className="club-heading"><p className="section-kicker">The space <span>01</span></p><h2 id="club-title">INSIDE THE<br/>REPUBLIC</h2><p className="section-intro">Red light. Reflective surfaces.<br/>A space built around music.</p></div>
-        <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
+        <div className="club-inner">
+          <div className="club-heading">
+            <p className="section-kicker chapter-kicker">The space <span>01</span></p>
+            <h2 id="club-title" className="chapter-title"><span className="word-mask"><span className="chapter-word">INSIDE THE</span></span>{' '}<span className="word-mask"><span className="chapter-word">REPUBLIC.</span></span></h2>
+            <p className="section-intro">Red light. Reflective surfaces.<br/>A space built around music.</p>
+          </div>
+          <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
+        </div>
       </section>
       <section id="atmosphere" className="atmosphere" aria-labelledby="atmosphere-title">
         <div className="atmosphere-photo">
@@ -221,7 +279,19 @@ export default function App() {
           <span className="photo-note">A feeling, before the first night.</span>
         </div>
         <div className="atmosphere-copy"><p className="atmosphere-kicker">The atmosphere <span>02</span></p><h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span><span className="word-mask"><span className="word">NIGHT.</span></span></h2><p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p></div>
-        <div className="atmosphere-signature"><p>Stay till sunrise.</p><a href="#opening" className="button glass">The first night <Arrow direction="down"/></a></div>
+        <div className="atmosphere-signature">
+          <svg className="signature-orbit" viewBox="0 0 880 570" aria-hidden="true">
+            <defs><linearGradient id="signature-light" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#32110a"/><stop offset=".53" stopColor="#fc582d"/><stop offset=".72" stopColor="#ffc090"/><stop offset="1" stopColor="#48130b"/></linearGradient></defs>
+            <g fill="none" stroke="url(#signature-light)" transform="rotate(-22 440 285)">
+              {Array.from({ length: 9 }, (_, i) => <ellipse key={i} cx="440" cy="285" rx={184 + i * 24} ry={115 + i * 12} strokeWidth={1.4 + i * .1} opacity={.38 + i * .055}/>) }
+            </g>
+          </svg>
+          <div className="signature-inner">
+            <p className="signature-kicker">Sunrise Republic · Nha Trang</p>
+            <p className="signature-title">Stay till<br/><span>sunrise.</span></p>
+            <a href="#opening" className="button glass">The first night <Arrow direction="down"/></a>
+          </div>
+        </div>
       </section>
       <section className="details section-wrap" id="details" aria-labelledby="details-title">
         <div className="details-inner">
@@ -232,30 +302,25 @@ export default function App() {
           <div className="details-spread">
             <figure className="detail-lounge section-reveal">
               <div className="detail-media"><img src={media('lounge.webp')} width="1116" height="1400" loading="lazy" alt="Red lounge seating under mirrored ceiling lights with the SR monogram on the wall." /></div>
-              <figcaption><span>The lounge</span><span>01</span></figcaption>
+              <figcaption><span><strong>The lounge</strong>Mirrored ceiling · Red banquettes</span><span>01</span></figcaption>
             </figure>
             <figure className="detail-mirrors section-reveal">
-              <button className="detail-media" onClick={() => { setGalleryIndex(2); setGalleryFull(true); }} aria-label="Enlarge Mirrors and details">
+              <button className="detail-media" onClick={() => { setGalleryIndex(mirrorsIndex); setGalleryFull(true); }} aria-label="Enlarge Mirrors and details">
                 <img src={media('mirrors.webp')} width="1024" height="1280" loading="lazy" alt="Lit circular mirror and glass blocks above dark stone basins." />
                 <span className="detail-arrow glass"><Arrow/></span>
               </button>
-              <figcaption><span>Mirrors &amp; details</span><span>02</span></figcaption>
+              <figcaption><span><strong>Mirrors &amp; details</strong>Glass blocks · Dark stone</span><span>02</span></figcaption>
             </figure>
           </div>
         </div>
       </section>
+      <UpcomingEvents/>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">
         <div className="first-night-light" aria-hidden="true"/>
-        <svg className="first-night-orbits" viewBox="0 0 1000 390" aria-hidden="true">
-          <g fill="none" stroke="currentColor" strokeWidth="1">
-            {Array.from({ length: 9 }, (_, i) => <ellipse key={i} cx="500" cy="195" rx={306 + i * 22} ry={67 + i * 12} transform={`rotate(${i * 3 - 12} 500 195)`}/>) }
-          </g>
-        </svg>
         <div className="first-night-inner">
-          <p className="section-kicker chapter-kicker section-reveal">The first night <span>04</span></p>
-          <p className="opening-status section-reveal">Planned opening</p>
-          <h2 id="opening-title" className="section-reveal"><time dateTime="12-31">31 December</time></h2>
-          <a href="#find-us" className="button glass section-reveal">Find us in Nha Trang <Arrow direction="down"/></a>
+          <div className="first-night-top section-reveal"><p className="section-kicker chapter-kicker">The first night <span>05</span></p><p className="opening-status">Planned opening</p></div>
+          <h2 id="opening-title" className="chapter-title"><time dateTime="12-31"><span className="word-mask"><span className="chapter-word opening-day">31</span></span>{' '}<span className="word-mask"><span className="chapter-word opening-month">December</span></span></time></h2>
+          <div className="first-night-bottom section-reveal"><p>Sunrise Republic<br/>Nha Trang, Vietnam</p><a href="#find-us" className="button glass">Find us in Nha Trang <Arrow direction="down"/></a></div>
         </div>
       </section>
       <Location/>
