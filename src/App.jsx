@@ -98,6 +98,7 @@ function Gallery({ index, setIndex, full, setFull }) {
       <button className="gallery-open" aria-label={`Enlarge ${images[index].title}`} onClick={() => { if (!swiped.current) setFull(true); swiped.current = false; }}>
         {images.map((im, i) => <img key={im.src} src={media(im.src)} alt={im.alt} className={i === index ? 'is-active' : ''} aria-hidden={i !== index} loading="lazy" decoding="async" width="2000" height="1246" />)}
         <span className="gallery-hint glass">Take a closer look <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span className="gallery-scene-label" aria-hidden="true" key={index}><span>0{index + 1} / 0{images.length}</span>{images[index].title}</span>
       </button>
       <div className="gallery-controls">{controls}</div>
     </div>
@@ -114,7 +115,7 @@ function Location() {
   return (
     <section className="location section-wrap" id="find-us" aria-labelledby="location-title">
       <div className="location-copy section-reveal">
-        <p className="section-kicker">Nha Trang, Vietnam</p>
+        <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>05</span></p>
         <h2 id="location-title">FIND US.</h2>
         <address>11 Ngô Gia Tự<br/>Nha Trang, Khánh Hòa 650000<br/>Vietnam</address>
         <a className="button button-red" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
@@ -140,22 +141,34 @@ export default function App() {
   }, []);
   useGSAP(() => {
     if (reduced) return;
-    const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    intro.from('.site-header', { y: -25, opacity: 0, duration: 1 }, .1)
-      .from('.hero-location', { y: 12, opacity: 0, duration: .9 }, .3)
-      .from('.hero-line > span', { yPercent: 110, rotate: 3, transformOrigin: '0% 100%', duration: 1.4, stagger: 0.14 }, .25)
-      .from('.hero-description, .hero-action', { y: 18, opacity: 0, duration: .9, stagger: .12 }, .7)
-      .from('.hero-bottom, .hero-scroll', { opacity: 0, y: 15, duration: 1 }, 1.05);
-    gsap.to('.hero-content', { y: -65, scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }, ease: 'none' });
-    gsap.from('.club-heading > *', { scrollTrigger: { trigger: '.club', start: 'top 78%', once: true }, y: 45, opacity: 0, stagger: .13, duration: 1, ease: 'power3.out' });
-    gsap.from('.gallery-stage', { scrollTrigger: { trigger: '.gallery-stage', start: 'top 95%', end: 'top 38%', scrub: .8 }, scale: .94, y: 35, ease: 'none' });
-    const atmosphere = gsap.timeline({ scrollTrigger: { trigger: '.atmosphere-copy', start: 'top 78%', once: true }, defaults: { duration: 1, ease: 'power3.out' } });
-    atmosphere.from('.atmosphere-kicker', { opacity: 0, y: 16 })
-      .from('.atmosphere-heading .word', { yPercent: 110, rotate: 3, stagger: .14, transformOrigin: '0% 100%' }, .1)
-      .from('.atmosphere-description', { opacity: 0, y: 25 }, .5)
-      .from('.signature-line', { scaleX: 0, transformOrigin: 'left', duration: 1.2 }, .6)
-      .from('.atmosphere-signature > p, .atmosphere-signature > a', { opacity: 0, y: 20, stagger: .12 }, .75);
-    gsap.fromTo('.atmosphere-photo img', { yPercent: -5, scale: 1.12 }, { yPercent: 5, scrollTrigger: { trigger: '.atmosphere', start: 'top bottom', end: 'bottom top', scrub: true }, ease: 'none' });
+    gsap.to('.hero-content', {
+      yPercent: -24, scale: .92, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 25%', scrub: .5 },
+    });
+    gsap.from('.club-heading > *', {
+      y: 38, opacity: .35, stagger: .11, duration: .9, ease: 'power3.out',
+      scrollTrigger: { trigger: '.club-heading', start: 'top 87%', once: true },
+    });
+    gsap.fromTo('.gallery-stage', { clipPath: 'inset(10% 14% 10% 14%)', '--room-scale': 1.22 }, {
+      clipPath: 'inset(0% 0% 0% 0%)', '--room-scale': 1, ease: 'none',
+      scrollTrigger: { trigger: '.gallery-stage', start: 'top 98%', end: 'top 29%', scrub: .45 },
+    });
+    gsap.fromTo('.atmosphere-photo img', { yPercent: -9, scale: 1.21 }, {
+      yPercent: 9, scale: 1.21, ease: 'none',
+      scrollTrigger: { trigger: '.atmosphere', start: 'top bottom', end: 'bottom top', scrub: .45 },
+    });
+    gsap.from('.atmosphere-heading .word', {
+      yPercent: 110, stagger: .16, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '.atmosphere-heading', start: 'top 88%', once: true },
+    });
+    gsap.from('.atmosphere-signature', {
+      x: 34, opacity: .3, duration: .9, ease: 'power3.out',
+      scrollTrigger: { trigger: '.atmosphere-signature', start: 'top 92%', once: true },
+    });
+    gsap.fromTo('.first-night-orbits', { scale: .7, rotate: -13 }, {
+      scale: 1.2, rotate: 12, ease: 'none',
+      scrollTrigger: { trigger: '.first-night', start: 'top bottom', end: 'bottom top', scrub: .5 },
+    });
     for (const selector of ['.details', '.first-night', '.location']) {
       gsap.from(`${selector} .section-reveal`, {
         scrollTrigger: { trigger: selector, start: 'top 80%', once: true },
@@ -174,28 +187,27 @@ export default function App() {
         <SunriseScene paused={paused || reduced}/>
         <div className="hero-shade"/>
         <div className="hero-content">
-          <p className="hero-location">Nha Trang, Vietnam <span className="location-dot"/></p>
-          <h1 id="hero-title"><span className="hero-line"><span>STAY TILL</span></span><span className="hero-line"><span>SUNRISE.</span></span></h1>
-          <p className="hero-description">A new nightclub in Nha Trang.<br/>A night worth staying for.</p>
-          <a className="button glass hero-action" href="#club">Explore the club <Arrow direction="down"/></a>
+          <p className="hero-location"><span className="location-dot"/> Nightclub · Nha Trang, Vietnam</p>
+          <h1 id="hero-title"><span className="hero-line hero-line-intro"><span>STAY TILL</span></span><span className="hero-line hero-line-title"><span>SUNRISE.</span></span></h1>
         </div>
         <div className="hero-bottom">
           <button className="motion-control" onClick={() => setPaused(v => !v)} aria-label={paused || reduced ? 'Play ambient animation' : 'Pause ambient animation'} aria-pressed={paused || reduced} disabled={reduced}><span className={`motion-icon ${paused || reduced ? 'paused' : ''}`} aria-hidden="true"><i/><i/><i/><i/></span><span>{paused || reduced ? 'Motion paused' : 'Pause motion'}</span></button>
+          <a className="button glass hero-action" href="#club">Explore the club <Arrow direction="down"/></a>
           <div className="opening-note"><span>Planned opening</span><p>31 December<svg className="opening-star" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" strokeWidth="1.5">{Array.from({ length: 8 }, (_, i) => <path key={i} d="M20 4v9" transform={`rotate(${i * 45} 20 20)`}/>)}<circle cx="20" cy="20" r="3"/></g></svg></p></div>
         </div>
-        <a className="hero-scroll" href="#club" aria-label="Scroll to the club"><Arrow direction="down"/></a>
       </section>
       <section id="club" className="club section-wrap" aria-labelledby="club-title">
-        <div className="club-heading"><h2 id="club-title">INSIDE THE<br/>REPUBLIC</h2><div><p className="section-intro">A first look at our<br/>new home in Nha Trang.</p><p className="section-description">Red light. Reflective surfaces.<br/>A space built around music.</p></div></div>
+        <div className="club-heading"><p className="section-kicker">The space <span>01</span></p><h2 id="club-title">INSIDE THE<br/>REPUBLIC</h2><p className="section-intro">Red light. Reflective surfaces.<br/>A space built around music.</p></div>
         <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
       </section>
       <section id="atmosphere" className="atmosphere" aria-labelledby="atmosphere-title">
         <div className="atmosphere-photo"><img src={media('atmosphere.webp')} alt="An editorial image of two friends dancing in warm red light." loading="lazy" width="1086" height="1448"/><span className="photo-note">A feeling, before the first night.</span></div>
-        <div className="atmosphere-copy"><p className="atmosphere-kicker">Made for the moment.</p><h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span><span className="word-mask"><span className="word">NIGHT.</span></span></h2><p className="atmosphere-description">Electronic music. A shared pulse.<br/>Some nights stay with you.</p><div className="atmosphere-signature"><div className="signature-line" aria-hidden="true"/><p>Stay till sunrise.</p><a href={mapUrl} className="button glass" target="_blank" rel="noreferrer">Find your way here <Arrow/></a></div></div>
+        <div className="atmosphere-copy"><p className="atmosphere-kicker">The atmosphere <span>02</span></p><h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span><span className="word-mask"><span className="word">NIGHT.</span></span></h2><p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p></div>
+        <div className="atmosphere-signature"><p>Stay till sunrise.</p><a href="#opening" className="button glass">The first night <Arrow direction="down"/></a></div>
       </section>
       <section className="details section-wrap" aria-labelledby="details-title">
         <div className="details-heading section-reveal">
-          <p className="section-kicker">Light &amp; materials</p>
+          <p className="section-kicker chapter-kicker">Light &amp; materials <span>03</span></p>
           <h2 id="details-title">EVERY DETAIL<br/>MATTERS.</h2>
         </div>
         <div className="details-spread">
@@ -214,9 +226,15 @@ export default function App() {
       </section>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">
         <div className="first-night-light" aria-hidden="true"/>
+        <svg className="first-night-orbits" viewBox="0 0 1000 390" aria-hidden="true">
+          <g fill="none" stroke="currentColor" strokeWidth="1">
+            {Array.from({ length: 9 }, (_, i) => <ellipse key={i} cx="500" cy="195" rx={306 + i * 22} ry={67 + i * 12} transform={`rotate(${i * 3 - 12} 500 195)`}/>) }
+          </g>
+        </svg>
         <div className="first-night-inner">
-          <p className="section-kicker section-reveal">The first night · Planned opening</p>
-          <h2 id="opening-title" className="section-reveal">31 December</h2>
+          <p className="section-kicker chapter-kicker section-reveal">The first night <span>04</span></p>
+          <p className="opening-status section-reveal">Planned opening</p>
+          <h2 id="opening-title" className="section-reveal"><time dateTime="12-31">31 December</time></h2>
           <a href="#find-us" className="button glass section-reveal">Find us in Nha Trang <Arrow direction="down"/></a>
         </div>
       </section>

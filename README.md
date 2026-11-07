@@ -15,9 +15,9 @@ Open http://127.0.0.1:5173/ on this computer. Production check: `npm run build`;
 
 ## Included
 
-- Animated Three.js sunrise sculpture with pointer response, pause control, reduced-motion behavior and a static CSS fallback.
+- A Three.js portal with sixteen animated metal bands, pointer response, pause, reduced-motion behavior and an SVG alternative for devices without WebGL.
 - Liquid-glass navigation adapted from the user's DIGITAL-EVENTS source reference.
-- Interior carousel with three images, keyboard-operable enlargement and swipe navigation.
+- Scroll-driven opening of the interior frame and a carousel with keyboard-operable enlargement and swipe navigation.
 - Atmospheric editorial section, interior details, planned opening on 31 December, and a Google Maps embed and directions for 11 Ngô Gia Tự.
 
 ## Asset provenance
