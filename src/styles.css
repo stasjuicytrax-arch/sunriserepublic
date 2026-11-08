@@ -74,13 +74,6 @@ dialog::backdrop { background: rgb(0 0 0 / 70%); backdrop-filter: blur(10px); }
   to { transform: rotate(340deg); }
 }
 .motion-paused .fallback-portal { animation-play-state: paused; }
-.scene-loader { position: absolute; z-index: 3; inset-inline: 0; bottom: clamp(26px, 7svh, 85px); display: grid; justify-items: center; gap: 10px; pointer-events: none; color: #ffb29a; animation: scene-loader-in .32s .18s both; }
-.scene-loader svg { width: 44px; height: 44px; color: #ff754f; }
-.scene-loader span { font-size: 10px; font-weight: 650; letter-spacing: .17em; text-transform: uppercase; }
-.scene-loader-arc { transform-origin: center; animation: scene-loader-orbit 1.35s cubic-bezier(.46,.14,.54,.86) infinite; }
-.motion-paused .scene-loader-arc { animation-play-state: paused; }
-@keyframes scene-loader-in { from { opacity: 0; translate: 0 5px; } to { opacity: 1; translate: 0 0; } }
-@keyframes scene-loader-orbit { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
 .hero-shade { pointer-events: none; position: absolute; inset: 0; background: linear-gradient(0deg, #080302 0%, #08030200 26%, #08030200 77%, #0803028c 100%); }
 .hero-content { position: relative; z-index: 2; width: 100%; padding-inline: 12px; text-align: center; color: #fff4e7; }
 .hero-location { display: flex; align-items: center; justify-content: center; gap: 11px; color: #ffe3d1; font-size: clamp(10px, 1vw, 14px); font-weight: 600; margin-bottom: 25px; letter-spacing: .10em; text-transform: uppercase; }
@@ -343,4 +336,3 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }*,*::before,*::after { animation-duration: .01ms !important; transition-duration: .01ms !important; animation-iteration-count: 1 !important; } }
-@media (prefers-reduced-motion: reduce) { .scene-loader, .scene-loader-arc { animation: none; } }

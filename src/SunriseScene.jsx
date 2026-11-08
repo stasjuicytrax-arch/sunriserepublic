@@ -104,6 +104,10 @@ export default function SunriseScene({ paused }) {
   }, [paused]);
 
   useEffect(() => {
+    if (phase !== 'loading') document.dispatchEvent(new Event('sunrise:portal-settled'));
+  }, [phase]);
+
+  useEffect(() => {
     let disposed = false;
     let cleanup = () => {};
     const loadingTimeout = window.setTimeout(() => settle('fallback'), 4500);
@@ -250,18 +254,5 @@ export default function SunriseScene({ paused }) {
     };
   }, []);
 
-  return <>
-    <div className={`sunrise-scene is-${phase}`} ref={host} aria-hidden="true"><Fallback/></div>
-    {phase === 'loading' && (
-      <div className="scene-loader" role="status">
-        <svg viewBox="0 0 48 48" aria-hidden="true" fill="none">
-          <circle cx="24" cy="24" r="20" stroke="currentColor" opacity=".23"/>
-          <circle cx="24" cy="24" r="15" stroke="currentColor" opacity=".15"/>
-          <circle className="scene-loader-arc" cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="36 90"/>
-          <path d="M17 27h14m-12 0a5 5 0 1 1 10 0" stroke="currentColor" strokeWidth="1.2"/>
-        </svg>
-        <span>Loading the portal</span>
-      </div>
-    )}
-  </>;
+  return <div className={`sunrise-scene is-${phase}`} ref={host} aria-hidden="true"><Fallback/></div>;
 }
