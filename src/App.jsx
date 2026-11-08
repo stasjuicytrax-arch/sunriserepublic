@@ -355,7 +355,7 @@ export default function App() {
       </section>
       <UpcomingEvents/>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">
-        <div className="opening-art" aria-hidden="true"><img src={media('opening-sunrise.webp')} alt="" width="533" height="800" loading="lazy" decoding="async"/></div>
+        <div className="opening-art" aria-hidden="true"><img src={media('opening-horizon.webp')} alt="" width="1254" height="1254" loading="lazy" decoding="async"/></div>
         <div className="first-night-inner">
           <div className="first-night-top section-reveal"><p className="section-kicker chapter-kicker">THE FIRST NIGHT <span>05</span></p><p className="opening-status">Planned opening</p></div>
           <h2 id="opening-title" className="chapter-title"><time dateTime="12-31"><span className="word-mask"><span className="chapter-word opening-day">31</span></span>{' '}<span className="word-mask"><span className="chapter-word opening-month"><TitleEnd>December</TitleEnd></span></span></time></h2>

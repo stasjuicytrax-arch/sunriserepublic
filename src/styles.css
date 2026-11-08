@@ -244,9 +244,10 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
 .poster-caption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding-top: 13px; }
 .poster-caption h3 { margin: 0; font-size: clamp(17px, 2vw, 27px); font-weight: 700; letter-spacing: -.045em; }
 .poster-caption span { color: #ecac96; font-size: 11px; }
-.first-night { position: relative; isolation: isolate; padding-block: clamp(46px, 6vw, 92px); overflow: clip; background: radial-gradient(ellipse at 71% 52%, #3b0d07, transparent 58%), #100403; color: white; }
-.opening-art { position: absolute; z-index: -1; inset-block: 0; right: max(0px, calc((100% - 1530px) / 2)); width: min(59%, 880px); display: grid; place-items: center; pointer-events: none; }
-.opening-art img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; mask-image: radial-gradient(ellipse closest-side, #000 74%, transparent 100%); }
+.first-night { position: relative; isolation: isolate; padding-block: clamp(46px, 6vw, 92px); overflow: clip; background: #100403; color: white; }
+.opening-art { position: absolute; z-index: -1; inset: 0 0 0 auto; width: min(76%, 1390px); overflow: hidden; pointer-events: none; mask-image: linear-gradient(90deg, transparent, #000 17%); }
+.opening-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
+.opening-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #100403 0%, #100403df 15%, #10040368 43%, transparent 70%), linear-gradient(0deg, #100403d9, transparent 27%, transparent 75%, #100403a6); }
 .first-night-inner { position: relative; max-width: 1390px; min-height: clamp(470px, 46vw, 710px); margin-inline: auto; display: flex; flex-direction: column; justify-content: space-between; }
 .first-night-top, .first-night-bottom { display: flex; justify-content: space-between; align-items: center; gap: 15px; border-block-start: 1px solid #fda18455; padding-block: 16px; }
 .first-night .section-kicker { color: #ffd6c7; margin: 0; }
@@ -327,7 +328,8 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
   .event-poster:nth-child(2) { margin-top: 0; }
   .opening-month { font-size: clamp(39px, 12vw, 73px); }
   .first-night-bottom { flex-wrap: wrap; }
-  .opening-art { inset-block: 88px auto; right: 0; width: 100%; }
+  .opening-art { inset-block: 88px auto; width: 100%; aspect-ratio: 1; mask-image: none; }
+  .opening-art::after { background: linear-gradient(0deg, #100403 0%, #10040368 26%, transparent 56%, #10040394 100%); }
   .first-night h2 { margin-top: clamp(120px, 36vw, 210px); }
   .footer-brand { grid-column: 1 / -1; }
   .footer-social { grid-column: 1 / -1; }
