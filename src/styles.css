@@ -327,7 +327,7 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
   .event-poster:nth-child(2) { margin-top: 0; }
   .opening-month { font-size: clamp(39px, 12vw, 73px); }
   .first-night-bottom { flex-wrap: wrap; }
-  .opening-art { inset-block: 24px auto; right: 0; width: 100%; }
+  .opening-art { inset-block: 88px auto; right: 0; width: 100%; }
   .first-night h2 { margin-top: clamp(120px, 36vw, 210px); }
   .footer-brand { grid-column: 1 / -1; }
   .footer-social { grid-column: 1 / -1; }
