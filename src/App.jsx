@@ -15,7 +15,7 @@ const links = [['The club', '#club'], ['Atmosphere', '#atmosphere'], ['Events', 
 const images = [
   { src: 'main-room.webp', title: 'The main room', detail: 'The dance floor', width: 2000, height: 1246, alt: 'Interior visualization of the main room with angular ceiling lights, red walls and a central DJ booth.' },
   { src: 'bar.webp', title: 'At the bar', detail: 'Sculpted light', width: 2000, height: 915, alt: 'Interior visualization of the long illuminated bar and sculptural ceiling lights.' },
-  { src: 'lounge.webp', title: 'The lounge', detail: 'A quieter corner', width: 1116, height: 1400, alt: 'Red lounge seating under mirrored ceiling lights with the SR monogram on the wall.' },
+  { src: 'lounge.webp', title: 'At VVIP table', detail: 'A quieter corner', width: 1116, height: 1400, alt: 'Red lounge seating under mirrored ceiling lights with the SR monogram on the wall.' },
   { src: 'mirrors.webp', title: 'Mirrors & details', detail: 'Glass and stone', width: 1024, height: 1280, alt: 'Restroom interior with an illuminated mirror, glass blocks and dark stone basins.' },
 ];
 const mirrorsIndex = images.findIndex(image => image.src === 'mirrors.webp');
@@ -341,7 +341,7 @@ export default function App() {
           <div className="details-spread">
             <figure className="detail-lounge section-reveal">
               <div className="detail-media"><img src={media('lounge.webp')} width="1116" height="1400" loading="lazy" alt="Red lounge seating under mirrored ceiling lights with the SR monogram on the wall." /></div>
-              <figcaption><span><strong>The lounge</strong>Mirrored ceiling · Red banquettes</span><span>01</span></figcaption>
+              <figcaption><span><strong>At VVIP table</strong>Mirrored ceiling · Red banquettes</span><span>01</span></figcaption>
             </figure>
             <figure className="detail-mirrors section-reveal">
               <button className="detail-media" onClick={() => { setGalleryIndex(mirrorsIndex); setGalleryFull(true); }} aria-label="Enlarge Mirrors and details">
