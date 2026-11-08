@@ -25,6 +25,10 @@ const posters = [
   { title: 'Tempo Rush', src: 'poster-tempo-rush.webp', width: 607 },
 ];
 
+function TitleEnd({ children }) {
+  return <span className="title-end">{children}<span className="chapter-period">.</span></span>;
+}
+
 function Arrow({ direction = 'up-right', ...props }) {
   const paths = { 'up-right': 'M6 18 18 6M6 6h12v12', down: 'M12 4v16m-7-7 7 7 7-7', right: 'm9 5 7 7-7 7', left: 'm15 5-7 7 7 7' };
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}><path d={paths[direction]} /></svg>;
@@ -143,7 +147,7 @@ function UpcomingEvents() {
       <div className="events-inner">
         <div className="events-heading">
           <p className="section-kicker chapter-kicker">Programme <span>04</span></p>
-          <h2 id="events-title"><span className="word-mask"><span className="chapter-word">UPCOMING EVENTS.</span></span></h2>
+          <h2 id="events-title"><span className="word-mask"><span className="chapter-word">UPCOMING <TitleEnd>EVENTS</TitleEnd></span></span></h2>
           <p className="section-intro">A first look at the programme.<br/>{' '}Dates to be announced.</p>
         </div>
         <p className="events-swipe">Swipe to view the posters <Arrow direction="right"/></p>
@@ -170,7 +174,7 @@ function Location() {
       <div className="location-stage">
         <div className="location-copy section-reveal">
           <p className="section-kicker chapter-kicker">Nha Trang, Vietnam <span>06</span></p>
-          <h2 id="location-title">FIND US.</h2>
+          <h2 id="location-title">FIND <TitleEnd>US</TitleEnd></h2>
           <address><strong>11 Ngô Gia Tự</strong><br/>Nha Trang, Khánh Hòa 650000<br/>Vietnam</address>
           <a className="button button-red" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
         </div>
@@ -300,14 +304,14 @@ export default function App() {
         <div className="hero-shade"/>
         <div className="hero-content">
           <p className="hero-location"><span className="location-dot"/> Nightclub · Nha Trang, Vietnam</p>
-          <h1 id="hero-title"><span className="hero-line hero-line-intro"><span>STAY TILL</span></span><span className="hero-line hero-line-title"><span>SUNRISE.</span></span></h1>
+          <h1 id="hero-title"><span className="hero-line hero-line-intro"><span>STAY TILL</span></span>{' '}<span className="hero-line hero-line-title"><span><TitleEnd>SUNRISE</TitleEnd></span></span></h1>
         </div>
       </section>
       <section id="club" className="club section-wrap" aria-labelledby="club-title">
         <div className="club-inner">
           <div className="club-heading">
             <p className="section-kicker chapter-kicker">The space <span>01</span></p>
-            <h2 id="club-title" className="chapter-title"><span className="word-mask"><span className="chapter-word">INSIDE THE</span></span>{' '}<span className="word-mask"><span className="chapter-word">REPUBLIC<span className="chapter-period">.</span></span></span></h2>
+            <h2 id="club-title" className="chapter-title"><span className="word-mask"><span className="chapter-word">INSIDE THE</span></span>{' '}<span className="word-mask"><span className="chapter-word"><TitleEnd>REPUBLIC</TitleEnd></span></span></h2>
             <p className="section-intro">Red light. Reflective surfaces.<br/>{' '}A space built around music.</p>
           </div>
           <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
@@ -323,7 +327,7 @@ export default function App() {
         </div>
         <div className="atmosphere-copy">
           <p className="atmosphere-kicker">The atmosphere <span>02</span></p>
-          <h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span>{' '}<span className="word-mask"><span className="word">NIGHT.</span></span></h2>
+          <h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span>{' '}<span className="word-mask"><span className="word"><TitleEnd>NIGHT</TitleEnd></span></span></h2>
           <p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p>
           <a href="#opening" className="button glass atmosphere-link">THE FIRST NIGHT <Arrow direction="down"/></a>
         </div>
@@ -332,7 +336,7 @@ export default function App() {
         <div className="details-inner">
           <div className="details-heading section-reveal">
             <p className="section-kicker chapter-kicker">Light &amp; materials <span>03</span></p>
-            <h2 id="details-title">EVERY DETAIL MATTERS.</h2>
+            <h2 id="details-title">EVERY DETAIL <TitleEnd>MATTERS</TitleEnd></h2>
           </div>
           <div className="details-spread">
             <figure className="detail-lounge section-reveal">
@@ -351,10 +355,10 @@ export default function App() {
       </section>
       <UpcomingEvents/>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">
-        <div className="opening-art" aria-hidden="true"><img src={media('opening-first-light.webp')} alt="" width="800" height="800" loading="lazy" decoding="async"/></div>
+        <div className="opening-art" aria-hidden="true"><img src={media('opening-sunrise.webp')} alt="" width="533" height="800" loading="lazy" decoding="async"/></div>
         <div className="first-night-inner">
           <div className="first-night-top section-reveal"><p className="section-kicker chapter-kicker">THE FIRST NIGHT <span>05</span></p><p className="opening-status">Planned opening</p></div>
-          <h2 id="opening-title" className="chapter-title"><time dateTime="12-31"><span className="word-mask"><span className="chapter-word opening-day">31</span></span>{' '}<span className="word-mask"><span className="chapter-word opening-month">December</span></span></time></h2>
+          <h2 id="opening-title" className="chapter-title"><time dateTime="12-31"><span className="word-mask"><span className="chapter-word opening-day">31</span></span>{' '}<span className="word-mask"><span className="chapter-word opening-month"><TitleEnd>December</TitleEnd></span></span></time></h2>
           <div className="first-night-bottom section-reveal"><p>NHA TRANG, VIETNAM</p><a href="#find-us" className="button glass">Find us in Nha Trang <Arrow direction="down"/></a></div>
         </div>
       </section>
