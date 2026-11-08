@@ -14,7 +14,6 @@ const vertex = `
   }
 `;
 const fragment = `
-  uniform float uPhase;
   uniform float uTime;
   uniform float uIndex;
   varying vec3 vNormal;
@@ -33,7 +32,6 @@ const fragment = `
     metal += vec3(.19,.022,.009) * fresnel;
     vec3 light = vec3(1.,.21,.064) * (.27 + sweep * .73) + vec3(.55,.24,.12) * gloss;
     vec3 color = metal + light * (edge * .82 + sweep * .23 + fresnel * .28);
-    color *= mix(.65, 1., uPhase);
     gl_FragColor = vec4(color, 1.);
   }
 `;
@@ -73,7 +71,7 @@ function createBand(THREE, index) {
     vertexShader: vertex,
     fragmentShader: fragment,
     side: THREE.DoubleSide,
-    uniforms: { uPhase: { value: 1 }, uTime: { value: 0 }, uIndex: { value: index } },
+    uniforms: { uTime: { value: 0 }, uIndex: { value: index } },
   });
   return new THREE.Mesh(geometry, material);
 }
@@ -153,7 +151,7 @@ export default function SunriseScene({ paused }) {
         }
         if (!pause.current && previous) time += Math.min((now - previous) / 1000, .18);
         previous = pause.current ? 0 : now;
-        const t = pause.current && time === 0 ? 3.2 : time;
+        const t = time + 3.2;
         if (!pause.current) {
           driftX += (pointerX - driftX) * .065;
           driftY += (pointerY - driftY) * .065;
@@ -162,16 +160,11 @@ export default function SunriseScene({ paused }) {
         portal.rotation.set(.13 + tilt * .14 + driftY * .23, -.15 + Math.sin(t * .69) * .25 + driftX * .4, -.15 + t * .14);
         portal.position.z = progress * 2;
         rings.forEach((ring, index) => {
-          const delay = index * .055;
-          const linear = Math.min(1, Math.max(0, (t - delay) / 1.8));
-          const entrance = 1 - (1 - linear) ** 3;
           const wave = Math.sin(t * 1.12 - index * .42);
-          ring.rotation.x = (1 - entrance) * 1.6 + wave * .22;
-          ring.rotation.y = (1 - entrance) * -.95 + Math.sin(t * .92 + index * .45) * .19;
-          ring.position.z = (index - bands / 2) * .058 + wave * .18 + (1 - entrance) * -2.8;
-          ring.scale.setScalar(.37 + entrance * .63);
+          ring.rotation.x = wave * .22;
+          ring.rotation.y = Math.sin(t * .92 + index * .45) * .19;
+          ring.position.z = (index - bands / 2) * .058 + wave * .18;
           ring.material.uniforms.uTime.value = t;
-          ring.material.uniforms.uPhase.value = entrance;
         });
         renderer.render(scene, camera);
         if (first) {

@@ -110,6 +110,7 @@ function Gallery({ index, setIndex, full, setFull }) {
       <div className="gallery-stage" onKeyDown={e => { if (e.key === 'ArrowRight') { e.preventDefault(); change(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); change(-1); } }} onTouchStart={e => { touch.current = e.changedTouches[0].clientX; swiped.current = false; }} onTouchEnd={e => { const d = touch.current - e.changedTouches[0].clientX; if (Math.abs(d) > 50) { swiped.current = true; change(d > 0 ? 1 : -1); } }}>
         <button className="gallery-open" aria-label={`Enlarge ${current.title}`} onClick={() => { if (!swiped.current) setFull(true); swiped.current = false; }}>
           <span className="gallery-camera">
+            {current.width < current.height && <span className="gallery-matte" aria-hidden="true" style={{ backgroundImage: `url('${media(current.src)}')` }}/>}
             {images.map((im, i) => <img key={im.src} src={media(im.src)} alt={im.alt} className={i === index ? 'is-active' : ''} aria-hidden={i !== index} loading="lazy" decoding="async" width={im.width} height={im.height}/>) }
           </span>
           <span className="gallery-exposure" aria-hidden="true"/>
@@ -143,8 +144,9 @@ function UpcomingEvents() {
         <div className="events-heading">
           <p className="section-kicker chapter-kicker">Programme <span>04</span></p>
           <h2 id="events-title"><span className="word-mask"><span className="chapter-word">UPCOMING EVENTS.</span></span></h2>
-          <p className="section-intro">A first look at the programme.<br/>Dates to be announced.</p>
+          <p className="section-intro">A first look at the programme.<br/>{' '}Dates to be announced.</p>
         </div>
+        <p className="events-swipe">Swipe to view the posters <Arrow direction="right"/></p>
         <ul className="event-posters" tabIndex={0} aria-label="Programme previews">
           {posters.map((poster, i) => (
             <li className="event-poster" key={poster.src}>
@@ -177,7 +179,13 @@ function Location() {
             {interactive ? (
               <iframe title="Google Maps — 11 Ngô Gia Tự, Nha Trang" src={mapEmbed} referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
             ) : (
-              <img src={media('nha-trang-map.svg')} alt="Street map showing the club at 11 Ngô Gia Tự." width="1400" height="900" loading="lazy" />
+              <>
+                <img src={media('nha-trang-map.svg')} alt="Street map showing 11 Ngô Gia Tự near Lê Thánh Tôn and Quang Trung." width="1400" height="900" loading="lazy" />
+                <svg className="map-pulse" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  {/* Matches the marker in nha-trang-map.svg. */}
+                  <circle className="map-beacon" cx="766" cy="444" r="34" fill="none" stroke="#ff845f" strokeWidth="3"/>
+                </svg>
+              </>
             )}
           </div>
           <div className="location-map-bar">
@@ -187,6 +195,41 @@ function Location() {
         </div>
       </div>
     </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="site-footer section-wrap">
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <a href="#home" className="brand" aria-label="Sunrise Republic — home" translate="no"><BrandMark/><span>SUNRISE<br/>REPUBLIC</span></a>
+            <p>STAY TILL SUNRISE.</p>
+          </div>
+          <nav className="footer-links" aria-label="Footer navigation">
+            <h2>Explore</h2>
+            {links.map(([name, href]) => <a key={href} href={href}>{name}</a>)}
+          </nav>
+          <div className="footer-contact">
+            <h2>Visit &amp; contact</h2>
+            <address>11 Ngô Gia Tự<br/>Nha Trang, Khánh Hòa, Vietnam</address>
+            <a className="footer-directions" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
+            <p className="footer-pending">Phone · Coming soon</p>
+          </div>
+          <div className="footer-social">
+            <h2>Socials</h2>
+            <ul aria-label="Social profiles coming soon">
+              <li role="img" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg></li>
+              <li role="img" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg></li>
+              <li role="img" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg></li>
+            </ul>
+            <p className="footer-pending">Profiles coming soon</p>
+          </div>
+        </div>
+        <div className="footer-bottom"><p>© SUNRISE REPUBLIC</p><a href="#home">Back to top <Arrow direction="up-right"/></a></div>
+      </div>
+    </footer>
   );
 }
 
@@ -205,7 +248,7 @@ export default function App() {
   useGSAP(() => {
     if (reduced) return;
     gsap.to('.hero-content', {
-      yPercent: -24, scale: .92, ease: 'none',
+      yPercent: -24, ease: 'none',
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 25%', scrub: .5 },
     });
     for (const title of root.current.querySelectorAll('.chapter-title, #events-title')) {
@@ -230,9 +273,9 @@ export default function App() {
       yPercent: 110, stagger: .16, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: '.atmosphere-heading', start: 'top 88%', once: true },
     });
-    gsap.fromTo('.signature-orbit', { yPercent: 18, rotate: -12, scale: .84 }, {
-      yPercent: -13, rotate: 8, scale: 1.15, ease: 'none',
-      scrollTrigger: { trigger: '.atmosphere-signature', start: 'top bottom', end: 'bottom top', scrub: .6 },
+    gsap.fromTo('.opening-art img', { yPercent: -4, scale: 1.11 }, {
+      yPercent: 4, scale: 1.11, ease: 'none',
+      scrollTrigger: { trigger: '.first-night', start: 'top bottom', end: 'bottom top', scrub: .55 },
     });
     gsap.from('.event-poster', {
       y: 36, opacity: .35, duration: .95, stagger: .11, ease: 'power3.out',
@@ -264,8 +307,8 @@ export default function App() {
         <div className="club-inner">
           <div className="club-heading">
             <p className="section-kicker chapter-kicker">The space <span>01</span></p>
-            <h2 id="club-title" className="chapter-title"><span className="word-mask"><span className="chapter-word">INSIDE THE</span></span>{' '}<span className="word-mask"><span className="chapter-word">REPUBLIC.</span></span></h2>
-            <p className="section-intro">Red light. Reflective surfaces.<br/>A space built around music.</p>
+            <h2 id="club-title" className="chapter-title"><span className="word-mask"><span className="chapter-word">INSIDE THE</span></span>{' '}<span className="word-mask"><span className="chapter-word">REPUBLIC<span className="chapter-period">.</span></span></span></h2>
+            <p className="section-intro">Red light. Reflective surfaces.<br/>{' '}A space built around music.</p>
           </div>
           <Gallery index={galleryIndex} setIndex={setGalleryIndex} full={galleryFull} setFull={setGalleryFull}/>
         </div>
@@ -278,19 +321,11 @@ export default function App() {
           </picture>
           <span className="photo-note">A feeling, before the first night.</span>
         </div>
-        <div className="atmosphere-copy"><p className="atmosphere-kicker">The atmosphere <span>02</span></p><h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span><span className="word-mask"><span className="word">NIGHT.</span></span></h2><p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p></div>
-        <div className="atmosphere-signature">
-          <svg className="signature-orbit" viewBox="0 0 880 570" aria-hidden="true">
-            <defs><linearGradient id="signature-light" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#32110a"/><stop offset=".53" stopColor="#fc582d"/><stop offset=".72" stopColor="#ffc090"/><stop offset="1" stopColor="#48130b"/></linearGradient></defs>
-            <g fill="none" stroke="url(#signature-light)" transform="rotate(-22 440 285)">
-              {Array.from({ length: 9 }, (_, i) => <ellipse key={i} cx="440" cy="285" rx={184 + i * 24} ry={115 + i * 12} strokeWidth={1.4 + i * .1} opacity={.38 + i * .055}/>) }
-            </g>
-          </svg>
-          <div className="signature-inner">
-            <p className="signature-kicker">Sunrise Republic · Nha Trang</p>
-            <p className="signature-title">Stay till<br/><span>sunrise.</span></p>
-            <a href="#opening" className="button glass">The first night <Arrow direction="down"/></a>
-          </div>
+        <div className="atmosphere-copy">
+          <p className="atmosphere-kicker">The atmosphere <span>02</span></p>
+          <h2 id="atmosphere-title" className="atmosphere-heading"><span className="word-mask"><span className="word">FEEL THE</span></span>{' '}<span className="word-mask"><span className="word">NIGHT.</span></span></h2>
+          <p className="atmosphere-description">Electronic music.<br/>A shared pulse.</p>
+          <a href="#opening" className="button glass atmosphere-link">THE FIRST NIGHT <Arrow direction="down"/></a>
         </div>
       </section>
       <section className="details section-wrap" id="details" aria-labelledby="details-title">
@@ -316,15 +351,15 @@ export default function App() {
       </section>
       <UpcomingEvents/>
       <section className="first-night section-wrap" id="opening" aria-labelledby="opening-title">
-        <div className="first-night-light" aria-hidden="true"/>
+        <div className="opening-art" aria-hidden="true"><img src={media('opening-first-light.webp')} alt="" width="800" height="800" loading="lazy" decoding="async"/></div>
         <div className="first-night-inner">
-          <div className="first-night-top section-reveal"><p className="section-kicker chapter-kicker">The first night <span>05</span></p><p className="opening-status">Planned opening</p></div>
+          <div className="first-night-top section-reveal"><p className="section-kicker chapter-kicker">THE FIRST NIGHT <span>05</span></p><p className="opening-status">Planned opening</p></div>
           <h2 id="opening-title" className="chapter-title"><time dateTime="12-31"><span className="word-mask"><span className="chapter-word opening-day">31</span></span>{' '}<span className="word-mask"><span className="chapter-word opening-month">December</span></span></time></h2>
-          <div className="first-night-bottom section-reveal"><p>Sunrise Republic<br/>Nha Trang, Vietnam</p><a href="#find-us" className="button glass">Find us in Nha Trang <Arrow direction="down"/></a></div>
+          <div className="first-night-bottom section-reveal"><p>NHA TRANG, VIETNAM</p><a href="#find-us" className="button glass">Find us in Nha Trang <Arrow direction="down"/></a></div>
         </div>
       </section>
       <Location/>
     </main>
-    <footer className="preview-footer"><a href="#home" className="brand" translate="no"><BrandMark/><span>SUNRISE<br/>REPUBLIC</span></a><p>Stay till sunrise.</p><a href="#home">Back to top <Arrow direction="up-right"/></a></footer>
+    <Footer/>
   </div>;
 }
