@@ -303,7 +303,7 @@ export default function App() {
         <SunriseScene paused={paused || reduced}/>
         <div className="hero-shade"/>
         <div className="hero-content">
-          <p className="hero-location"><span className="location-dot"/> Nightclub · Nha Trang, Vietnam</p>
+          <p className="hero-location"><span className="location-dot"/> Club · Nha Trang, Vietnam</p>
           <h1 id="hero-title"><span className="hero-line hero-line-intro"><span>STAY TILL</span></span>{' '}<span className="hero-line hero-line-title"><span>SUNRISE</span></span></h1>
         </div>
       </section>

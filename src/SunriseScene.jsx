@@ -96,7 +96,7 @@ export default function SunriseScene({ paused }) {
   const host = useRef(null);
   const pause = useRef(paused);
   const requestFrame = useRef(() => {});
-  const [ready, setReady] = useState(false);
+  const [phase, setPhase] = useState('loading');
 
   useEffect(() => {
     pause.current = paused;
@@ -106,6 +106,13 @@ export default function SunriseScene({ paused }) {
   useEffect(() => {
     let disposed = false;
     let cleanup = () => {};
+    const loadingTimeout = window.setTimeout(() => settle('fallback'), 4500);
+
+    function settle(nextPhase) {
+      window.clearTimeout(loadingTimeout);
+      if (!disposed) setPhase(nextPhase);
+    }
+
     async function start() {
       const THREE = await import('three');
       const element = host.current;
@@ -114,6 +121,7 @@ export default function SunriseScene({ paused }) {
       try {
         renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
       } catch {
+        settle('fallback');
         return;
       }
 
@@ -169,7 +177,7 @@ export default function SunriseScene({ paused }) {
         renderer.render(scene, camera);
         if (first) {
           first = false;
-          setReady(true);
+          settle('ready');
         }
         if (!pause.current) schedule();
       }
@@ -196,7 +204,7 @@ export default function SunriseScene({ paused }) {
       const onLoss = () => {
         lost = true;
         cancelAnimationFrame(frame);
-        setReady(false);
+        settle('fallback');
       };
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(element);
@@ -232,10 +240,28 @@ export default function SunriseScene({ paused }) {
     }
     start().catch(error => {
       cleanup();
+      settle('fallback');
       console.warn('Sunrise portal unavailable; using the vector version.', error);
     });
-    return () => { disposed = true; cleanup(); };
+    return () => {
+      disposed = true;
+      window.clearTimeout(loadingTimeout);
+      cleanup();
+    };
   }, []);
 
-  return <div className={`sunrise-scene ${ready ? 'is-ready' : ''}`} ref={host} aria-hidden="true"><Fallback/></div>;
+  return <>
+    <div className={`sunrise-scene is-${phase}`} ref={host} aria-hidden="true"><Fallback/></div>
+    {phase === 'loading' && (
+      <div className="scene-loader" role="status">
+        <svg viewBox="0 0 48 48" aria-hidden="true" fill="none">
+          <circle cx="24" cy="24" r="20" stroke="currentColor" opacity=".23"/>
+          <circle cx="24" cy="24" r="15" stroke="currentColor" opacity=".15"/>
+          <circle className="scene-loader-arc" cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="36 90"/>
+          <path d="M17 27h14m-12 0a5 5 0 1 1 10 0" stroke="currentColor" strokeWidth="1.2"/>
+        </svg>
+        <span>Loading the portal</span>
+      </div>
+    )}
+  </>;
 }
