@@ -8,6 +8,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const base = import.meta.env.BASE_URL;
 const media = (name) => `${base}media/${name}`;
 const address = '11 Ngô Gia Tự, Nha Trang, Khánh Hòa 650000, Vietnam';
+const clubPhone = '+84 36 377 89 77';
 const mapQuery = encodeURIComponent(address);
 const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`;
 const mapEmbed = `https://maps.google.com/maps?q=${mapQuery}&z=17&output=embed`;
@@ -41,6 +42,10 @@ function BrandMark() {
 
 function CloseIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>;
+}
+
+function ClubPhone() {
+  return <a className="club-phone" href={`tel:${clubPhone.replaceAll(' ', '')}`}>{clubPhone}</a>;
 }
 
 function GlassFilter() {
@@ -91,7 +96,13 @@ function Navigation({ paused, reduced, onToggleMotion }) {
     <dialog ref={dialog} id="main-menu" className="menu-dialog" aria-label="Main menu" onCancel={close} onClick={e => { if (e.target === dialog.current) close(); }}>
       <div className="menu-top"><span translate="no">SUNRISE REPUBLIC</span><button className="round-button" aria-label="Close menu" onClick={close}><CloseIcon/></button></div>
       <nav aria-label="Expanded navigation">{links.map(([text, href], i) => <a href={href} key={href} onClick={close} style={{ '--menu-order': i }}><span className="menu-number">0{i + 1}</span><span>{text}</span><Arrow/></a>)}</nav>
-      <div className="menu-bottom"><p>Nha Trang, Vietnam<br/><span>Planned opening · 31 December</span></p><a href={mapUrl} className="button button-red" target="_blank" rel="noreferrer">Get directions <Arrow/></a></div>
+      <div className="menu-bottom">
+        <div>
+          <p>Nha Trang, Vietnam<br/><span>Planned opening · 31 December</span></p>
+          <ClubPhone/>
+        </div>
+        <a href={mapUrl} className="button button-red" target="_blank" rel="noreferrer">Get directions <Arrow/></a>
+      </div>
       {!reduced && <button className="menu-motion" onClick={onToggleMotion}>{motionIcon}{motionLabel}</button>}
     </dialog>
   </>;
@@ -219,7 +230,7 @@ function Footer() {
             <h2>Visit &amp; contact</h2>
             <address>11 Ngô Gia Tự<br/>Nha Trang, Khánh Hòa, Vietnam</address>
             <a className="footer-directions" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
-            <p className="footer-pending">Phone · Coming soon</p>
+            <ClubPhone/>
           </div>
           <div className="footer-social">
             <h2>Socials</h2>

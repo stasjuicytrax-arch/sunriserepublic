@@ -60,6 +60,8 @@ dialog::backdrop { background: rgb(0 0 0 / 70%); backdrop-filter: blur(10px); }
 .menu-dialog nav a svg { width: 35px; height: 35px; }
 .menu-bottom { display: flex; justify-content: space-between; gap: 25px; align-items: end; font-size: 15px; line-height: 1.7; }
 .menu-bottom span { color: #d2bdb5; }
+.club-phone { display: flex; align-items: center; width: fit-content; min-height: 44px; white-space: nowrap; text-decoration: underline; text-underline-offset: .22em; }
+.club-phone:hover { color: #ff9d78; }
 .hero { position: relative; display: grid; place-items: center; min-height: max(620px, 100svh); overflow: clip; isolation: isolate; background: radial-gradient(ellipse at 50% 48%, #32100b 0%, #160604 48%, #080302 78%); }
 .sunrise-scene { position: absolute; inset: 4% 0; pointer-events: none; mask-image: linear-gradient(#000 0 72%, #000a 85%, transparent); }
 .sunrise-scene canvas, .scene-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -152,7 +154,7 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
 .footer-brand p { color: #d0a599; font-size: 11px; letter-spacing: .11em; margin-top: 16px; }
 .site-footer h2 { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #ffb8a2; text-transform: uppercase; margin-bottom: 14px; }
 .footer-links { display: flex; flex-direction: column; align-items: start; }
-.footer-links a, .footer-contact address, .footer-directions, .footer-pending { font-size: 13px; line-height: 1.55; }
+.footer-links a, .footer-contact address, .footer-directions, .footer-pending, .footer-contact .club-phone { font-size: 13px; line-height: 1.55; }
 .footer-links a { padding-block: 4px; }
 .footer-links a:hover, .footer-directions:hover, .footer-bottom a:hover { color: #ff9d78; }
 .footer-contact address { font-style: normal; }
@@ -188,7 +190,7 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
   .menu-top { font-size: 11px; }
   .menu-dialog nav { margin: 25px 0; }
   .menu-bottom { display: block; font-size: 12px; }
-  .menu-bottom .button { margin-top: 25px; }
+  .menu-bottom .button { margin-top: 8px; }
   .lightbox { padding: 10px; }
   .lightbox-close { top: 15px; right: 15px; }
   .lightbox-bottom { font-size: 13px; }
