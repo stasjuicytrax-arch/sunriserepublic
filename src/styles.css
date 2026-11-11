@@ -72,9 +72,8 @@ dialog { overscroll-behavior: contain; }
 .nav-links > a:not(.button) { font-size: 13px; font-weight: 500; color: #e7e1de; padding-block: 18px; transition: color .2s; }
 .nav-links > a:hover { color: white; }
 .nav-cta { font-size: 13px; min-height: 52px; padding: 12px 20px; gap: 14px; }
-.nav-motion, .menu-motion { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0; border-radius: 50%; background: transparent; color: #ffe3d1; }
-.nav-motion:hover, .menu-motion:hover { background: #ffffff14; color: white; }
-.menu-motion { gap: 8px; border-radius: 100px; padding-inline: 10px 16px; margin-top: 16px; font-size: 12px; }
+.menu-motion { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 0 16px 0 10px; border-radius: 100px; background: transparent; color: #ffe3d1; margin-top: 16px; font-size: 12px; }
+.menu-motion:hover { background: #ffffff14; color: white; }
 .menu-trigger { display: none; position: absolute; right: 12px; top: 13px; width: 46px; height: 46px; background: none; border-radius: 50%; }
 .menu-trigger span { position: absolute; width: 20px; height: 1px; background: white; left: 13px; top: 19px; }
 .menu-trigger span+span { top: 26px; }
@@ -184,15 +183,16 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
 .footer-brand p { color: #d0a599; font-size: 11px; letter-spacing: .11em; margin-top: 16px; }
 .site-footer h2 { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #ffb8a2; text-transform: uppercase; margin-bottom: 14px; }
 .footer-links { display: flex; flex-direction: column; align-items: start; }
-.footer-links a, .footer-contact address, .footer-directions, .footer-pending, .footer-contact .club-phone { font-size: 13px; line-height: 1.55; }
+.footer-links a, .footer-contact address, .footer-directions, .footer-contact .club-phone { font-size: 13px; line-height: 1.55; }
 .footer-links a { padding-block: 4px; }
 .footer-links a:hover, .footer-directions:hover, .footer-bottom a:hover { color: #ff9d78; }
 .footer-contact address { font-style: normal; }
 .footer-directions, .footer-bottom a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; }
 .footer-directions svg, .footer-bottom a svg { width: 17px; height: 17px; }
-.footer-pending { color: #d0a599; }
-.footer-social ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 10px; }
-.footer-social li { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #754337; border-radius: 50%; color: #e1b7a9; }
+.footer-social ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.footer-social a, .footer-social li[role="img"] { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #754337; border-radius: 50%; color: #e1b7a9; }
+.footer-social a:hover { color: #fff; border-color: #ff9d78; }
+.footer-social a:focus-visible { outline-offset: 2px; box-shadow: none; }
 .footer-social svg { width: 21px; height: 21px; }
 .footer-bottom { border-top: 1px solid #563022; padding-block: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: #d6b0a2; }
 @media (max-width: 1100px) {

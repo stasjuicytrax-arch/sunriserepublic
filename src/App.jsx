@@ -87,7 +87,6 @@ function Navigation({ paused, reduced, onToggleMotion }) {
         <a className="brand" href="#home" aria-label="SUNRISE REPUBLIC — home" translate="no"><BrandMark/><span>SUNRISE<br/>REPUBLIC</span></a>
         <nav className="nav-links" aria-label="Main navigation" inert={compact || undefined}>
           {links.map(([text, href]) => <a key={href} href={href}>{text}</a>)}
-          {!reduced && <button className="nav-motion" aria-label={motionLabel} title={motionLabel} onClick={onToggleMotion}>{motionIcon}</button>}
           <a className="button button-red nav-cta" href={mapUrl} target="_blank" rel="noreferrer">Get directions <Arrow/></a>
         </nav>
         <button className="menu-trigger" ref={trigger} aria-label="Open menu" aria-expanded={open} aria-controls="main-menu" onClick={() => setOpen(true)}><span/><span/></button>
@@ -234,12 +233,19 @@ function Footer() {
           </div>
           <div className="footer-social">
             <h2>Socials</h2>
-            <ul aria-label="Social profiles coming soon">
-              <li role="img" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg></li>
+            <ul aria-label="Social profiles">
+              <li>
+                <a href="https://www.instagram.com/sunriserepublic.asia/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
+                </a>
+              </li>
               <li role="img" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg></li>
-              <li role="img" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg></li>
+              <li>
+                <a href="https://m.youtube.com/channel/UCKqcKCYlSNJGvrfJZu-5nfA" target="_blank" rel="noreferrer" aria-label="YouTube" title="YouTube">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+                </a>
+              </li>
             </ul>
-            <p className="footer-pending">Profiles coming soon</p>
           </div>
         </div>
         <div className="footer-bottom"><p>© SUNRISE REPUBLIC</p><a href="#home">Back to top <Arrow direction="up-right"/></a></div>
