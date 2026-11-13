@@ -190,7 +190,7 @@ h2 { font-size: clamp(52px, 6.4vw, 110px); line-height: .95; letter-spacing: -.0
 .footer-directions, .footer-bottom a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; }
 .footer-directions svg, .footer-bottom a svg { width: 17px; height: 17px; }
 .footer-social ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
-.footer-social a, .footer-social li[role="img"] { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #754337; border-radius: 50%; color: #e1b7a9; }
+.footer-social a { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #754337; border-radius: 50%; color: #e1b7a9; }
 .footer-social a:hover { color: #fff; border-color: #ff9d78; }
 .footer-social a:focus-visible { outline-offset: 2px; box-shadow: none; }
 .footer-social svg { width: 21px; height: 21px; }

@@ -239,7 +239,11 @@ function Footer() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
                 </a>
               </li>
-              <li role="img" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg></li>
+              <li>
+                <a href="https://www.facebook.com/61595614919757/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg>
+                </a>
+              </li>
               <li>
                 <a href="https://m.youtube.com/channel/UCKqcKCYlSNJGvrfJZu-5nfA" target="_blank" rel="noreferrer" aria-label="YouTube" title="YouTube">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg>
