@@ -53,7 +53,29 @@ function GlassFilter() {
   return <svg className="filter-defs" aria-hidden="true"><defs><filter id="sr-liquid" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB"><feImage href={`data:image/svg+xml,${encodeURIComponent(map)}`} width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="22" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>;
 }
 
-function Navigation({ paused, reduced, onToggleMotion }) {
+function SocialLinks() {
+  return (
+    <ul className="social-links" aria-label="Social profiles">
+      <li>
+        <a href="https://www.instagram.com/sunriserepublic.asia/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.facebook.com/61595614919757/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg>
+        </a>
+      </li>
+      <li>
+        <a href="https://m.youtube.com/channel/UCKqcKCYlSNJGvrfJZu-5nfA" target="_blank" rel="noreferrer" aria-label="YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </li>
+    </ul>
+  );
+}
+
+function Navigation() {
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const dialog = useRef(null);
@@ -79,8 +101,6 @@ function Navigation({ paused, reduced, onToggleMotion }) {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
   const close = () => { setOpen(false); trigger.current?.focus(); };
-  const motionLabel = paused ? 'Resume background motion' : 'Pause background motion';
-  const motionIcon = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paused ? 'M9 5l11 7-11 7V5Z' : 'M9 6v12m6-12v12'}/></svg>;
   return <>
     <header className={`site-header ${compact ? 'is-compact' : ''}`}>
       <div className="nav-shell glass">
@@ -102,7 +122,7 @@ function Navigation({ paused, reduced, onToggleMotion }) {
         </div>
         <a href={mapUrl} className="button button-red" target="_blank" rel="noreferrer">Get directions <Arrow/></a>
       </div>
-      {!reduced && <button className="menu-motion" onClick={onToggleMotion}>{motionIcon}{motionLabel}</button>}
+      <SocialLinks/>
     </dialog>
   </>;
 }
@@ -233,23 +253,7 @@ function Footer() {
           </div>
           <div className="footer-social">
             <h2>Socials</h2>
-            <ul aria-label="Social profiles">
-              <li>
-                <a href="https://www.instagram.com/sunriserepublic.asia/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
-                </a>
-              </li>
-              <li>
-                <a href="https://www.facebook.com/61595614919757/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h2.7l.4-3.2H14V8c0-.9.3-1.5 1.6-1.5h1.7V3.6a20 20 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2H8V13h2.6v8z"/></svg>
-                </a>
-              </li>
-              <li>
-                <a href="https://m.youtube.com/channel/UCKqcKCYlSNJGvrfJZu-5nfA" target="_blank" rel="noreferrer" aria-label="YouTube" title="YouTube">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg>
-                </a>
-              </li>
-            </ul>
+            <SocialLinks/>
           </div>
         </div>
         <div className="footer-bottom"><p>© SUNRISE REPUBLIC</p><a href="#home">Back to top <Arrow direction="up-right"/></a></div>
@@ -260,7 +264,6 @@ function Footer() {
 
 export default function App() {
   const root = useRef(null);
-  const [paused, setPaused] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [galleryFull, setGalleryFull] = useState(false);
   const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -316,12 +319,12 @@ export default function App() {
     document.fonts.ready.then(() => { if (active) ScrollTrigger.refresh(); });
     return () => { active = false; };
   }, { scope: root, dependencies: [reduced], revertOnUpdate: true });
-  return <div ref={root} className={paused || reduced ? 'motion-paused' : undefined}>
+  return <div ref={root} className={reduced ? 'motion-paused' : undefined}>
     <a href="#main" className="skip-link">Skip to content</a>
-    <GlassFilter/><Navigation paused={paused} reduced={reduced} onToggleMotion={() => setPaused(value => !value)}/>
+    <GlassFilter/><Navigation/>
     <main id="main">
       <section id="home" className="hero" aria-labelledby="hero-title">
-        <SunriseScene paused={paused || reduced}/>
+        <SunriseScene paused={reduced}/>
         <div className="hero-shade"/>
         <div className="hero-content">
           <p className="hero-location"><span className="location-dot"/> Club · Nha Trang, Vietnam</p>
